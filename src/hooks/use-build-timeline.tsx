@@ -14,7 +14,6 @@ import {
 } from "medusa-react"
 import { useContext, useMemo } from "react"
 import { FeatureFlagContext } from "../context/feature-flag"
-import { orderReturnableFields } from "../domain/orders/details/utils/order-returnable-fields"
 
 export interface TimelineEvent {
   id: string
@@ -158,7 +157,7 @@ export interface NotificationEvent extends TimelineEvent {
 
 export const useBuildTimeline = (orderId: string) => {
   const { order, refetch } = useAdminOrder(orderId, {
-    fields: orderReturnableFields,
+    // fields: orderReturnableFields,
   })
 
   const { order_edits: edits } = useAdminOrderEdits({ order_id: orderId })

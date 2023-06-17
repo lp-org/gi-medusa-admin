@@ -31,7 +31,7 @@ const CustomGiftcard: React.FC<CustomGiftcardProps> = ({ onDismiss }) => {
     if (!isLoading) {
       setSelectedRegion({
         value: regions[0],
-        label: regions[0].name,
+        label: regions[0]?.name,
       })
     }
   }, [isLoading])
@@ -78,7 +78,7 @@ const CustomGiftcard: React.FC<CustomGiftcardProps> = ({ onDismiss }) => {
         <Modal.Content>
           <div className="flex flex-col">
             <span className="inter-base-semibold">Value</span>
-            <div className="flex gap-x-2xsmall mt-4">
+            <div className="mt-4 flex gap-x-2xsmall">
               <div className="w-[267px]">
                 <Select
                   label={"Region"}
@@ -87,7 +87,7 @@ const CustomGiftcard: React.FC<CustomGiftcardProps> = ({ onDismiss }) => {
                   options={
                     regions?.map((r) => ({
                       value: r,
-                      label: r.name,
+                      label: r?.name,
                     })) || []
                   }
                 />
@@ -116,7 +116,7 @@ const CustomGiftcard: React.FC<CustomGiftcardProps> = ({ onDismiss }) => {
           </div>
           <div className="mt-8">
             <span className="inter-base-semibold">Receiver</span>
-            <div className="grid grid-cols-1 gap-y-xsmall mt-4">
+            <div className="mt-4 grid grid-cols-1 gap-y-xsmall">
               <InputField
                 label={"Email"}
                 required

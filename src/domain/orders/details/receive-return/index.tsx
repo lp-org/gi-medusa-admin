@@ -12,7 +12,6 @@ import { ItemsToReceiveForm } from "../../components/items-to-receive-form/items
 import { RefundAmountFormType } from "../../components/refund-amount-form"
 import { ReceiveReturnSummary } from "../../components/rma-summaries/receive-return-summary"
 import { getDefaultReceiveReturnValues } from "../utils/get-default-values"
-import { orderReturnableFields } from "../utils/order-returnable-fields"
 import useOrdersExpandParam from "../utils/use-admin-expand-paramter"
 
 type Props = {
@@ -30,7 +29,7 @@ export const ReceiveReturnMenu = ({ order, returnRequest, onClose }: Props) => {
   const { mutate, isLoading } = useAdminReceiveReturn(returnRequest.id)
   const { orderRelations } = useOrdersExpandParam()
   const { refetch } = useAdminOrder(order.id, {
-    fields: orderReturnableFields,
+    // fields: orderReturnableFields,
     expand: orderRelations,
   })
 

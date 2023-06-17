@@ -1,5 +1,5 @@
 import { useAdminRegions, useAdminStore } from "medusa-react"
-import React, { useEffect, useMemo } from "react"
+import React, { useEffect, useMemo, useState } from "react"
 import { FieldArrayWithId, useFieldArray } from "react-hook-form"
 import { NestedForm } from "../../../../utils/nested-form"
 import NestedPrice from "./nested-price"
@@ -47,7 +47,7 @@ const PricesForm = ({ form }: Props) => {
 
   const { control, path } = form
 
-  const { append, update, fields } = useFieldArray({
+  const { append, update, fields, insert } = useFieldArray({
     control,
     name: path("prices"),
   })
@@ -56,10 +56,10 @@ const PricesForm = ({ form }: Props) => {
     if (!regions || !store || !fields) {
       return
     }
-
+    let temp: PricePayload[] = [...fields]
     regions.forEach((reg) => {
       if (!fields.some((field) => field.region_id === reg.id)) {
-        append({
+        temp.push({
           id: null,
           region_id: reg.id,
           amount: null,
@@ -71,7 +71,7 @@ const PricesForm = ({ form }: Props) => {
 
     store.currencies.forEach((cur) => {
       if (!fields.some((field) => field.currency_code === cur.code)) {
-        append({
+        temp.push({
           id: null,
           currency_code: cur.code,
           amount: null,
@@ -80,9 +80,13 @@ const PricesForm = ({ form }: Props) => {
         })
       }
     })
-
+    // @ts-ignore
+    form.setValue("prices.prices", temp)
+    return () => {
+      temp = []
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [regions, store, fields])
+  }, [regions, store])
 
   // Ensure that prices are up to date with their respective tax inclusion setting
   useEffect(() => {

@@ -20,6 +20,7 @@ import ReturnReasons from "./return-reasons"
 import Taxes from "./taxes"
 import Users from "./users"
 import KeyIcon from "../../components/fundamentals/icons/key-icon"
+import Roles from "./roles"
 
 const SettingsIndex = () => {
   return (
@@ -60,6 +61,12 @@ const SettingsIndex = () => {
         description={"Manage users of your Medusa Store"}
         icon={<UsersIcon />}
         to={`/a/settings/team`}
+      />
+      <SettingsCard
+        heading={"Roles"}
+        description={"Manage roles"}
+        icon={<UsersIcon />}
+        to={`/a/settings/role`}
       />
       <SettingsCard
         heading={"Personal Information"}
@@ -107,6 +114,7 @@ const Settings = () => (
     <Route path="/currencies" element={<CurrencySettings />} />
     <Route path="/return-reasons" element={<ReturnReasons />} />
     <Route path="/team" element={<Users />} />
+    <Route path="/role" element={<Roles />} />
     <Route path="/personal-information" element={<PersonalInformation />} />
     <Route path="/taxes" element={<Taxes />} />
   </Routes>

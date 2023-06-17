@@ -726,4 +726,19 @@ export default {
       return medusaRequest("DELETE", path)
     },
   },
+
+  roles: {
+    list() {
+      const path = `/admin/roles`
+      return medusaRequest("GET", path)
+    },
+    add(data) {
+      const path = `/admin/roles`
+      return medusaRequest("POST", path, data)
+    },
+    update(roleId, data) {
+      const path = `/admin/roles/${roleId}`
+      return medusaRequest("GET", path, data)
+    },
+  },
 }
