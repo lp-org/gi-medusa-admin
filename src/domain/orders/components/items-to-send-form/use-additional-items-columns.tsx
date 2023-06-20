@@ -46,10 +46,10 @@ export const useAdditionalItemsColumns = ({
           },
         }) => {
           return (
-            <div className="flex items-center gap-base">
+            <div className="gap-base flex items-center">
               <Thumbnail src={thumbnail} />
               <div className="inter-small-regular">
-                <div className="flex items-center gap-x-2xsmall">
+                <div className="gap-x-2xsmall flex items-center">
                   <p>{product_title}</p>
                   {variant_title && (
                     <p className="text-grey-50">({variant_title})</p>
@@ -112,7 +112,7 @@ export const useAdditionalItemsColumns = ({
                   content="The price has been overridden in a price list, that is applicable to this order."
                   side="top"
                 >
-                  <p className="cursor-default text-grey-40 line-through">
+                  <p className="text-grey-40 cursor-default line-through">
                     {formatAmountWithSymbol({
                       amount: original_price,
                       currency: orderCurrency,

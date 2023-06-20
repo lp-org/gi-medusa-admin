@@ -1,12 +1,12 @@
 import { MoneyAmount, Product, ProductVariant } from "@medusajs/medusa"
 import { useAdminStore } from "medusa-react"
 import * as React from "react"
+import LoadingContainer from "../../../../components/atoms/loading-container"
 import Button from "../../../../components/fundamentals/button"
 import EditIcon from "../../../../components/fundamentals/icons/edit-icon"
 import PlusIcon from "../../../../components/fundamentals/icons/plus-icon"
 import SearchIcon from "../../../../components/fundamentals/icons/search-icon"
 import TrashIcon from "../../../../components/fundamentals/icons/trash-icon"
-import LoadingContainer from "../../../../components/loading-container"
 import { ActionType } from "../../../../components/molecules/actionables"
 import InputField from "../../../../components/molecules/input"
 import Modal from "../../../../components/molecules/modal"
@@ -38,10 +38,8 @@ const ProductPrices = ({
   onFileChosen,
 }: ProductPricesProps) => {
   const [showAdd, setShowAdd] = React.useState(false)
-  const [
-    selectedVariant,
-    setSelectedVariant,
-  ] = React.useState<ProductVariant | null>(null)
+  const [selectedVariant, setSelectedVariant] =
+    React.useState<ProductVariant | null>(null)
   const unselect = () => setSelectedVariant(null)
 
   const { prices, setPrices } = usePriceListForm()
@@ -127,7 +125,7 @@ const ProductPrices = ({
         <Button
           variant="secondary"
           size="medium"
-          className="w-full rounded-rounded"
+          className="rounded-rounded w-full"
           onClick={() => setShowAdd(true)}
         >
           <PlusIcon />

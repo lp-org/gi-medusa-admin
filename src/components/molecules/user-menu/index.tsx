@@ -35,14 +35,14 @@ const UserMenu: React.FC = () => {
             <Avatar
               user={{ ...user }}
               isLoading={isLoading}
-              color="bg-fuschia-40"
+              color="bg-grey-80"
             />
           </div>
         </DropdownMenu.Trigger>
         <DropdownMenu.Content
           sideOffset={12}
           side="bottom"
-          className="z-30 ml-large min-w-[200px] rounded-rounded border border-grey-20 bg-grey-0 p-xsmall shadow-dropdown"
+          className="ml-large rounded-rounded border-grey-20 bg-grey-0 p-xsmall shadow-dropdown z-30 min-w-[200px] border"
         >
           <DropdownMenu.Item className="mb-1 outline-none">
             <Button

@@ -7,7 +7,7 @@ import {
   useAdminDeleteFile,
   useAdminStore,
 } from "medusa-react"
-import React, { useEffect, useMemo, useRef, useState } from "react"
+import { useEffect, useMemo, useRef, useState } from "react"
 import useNotification from "../../../hooks/use-notification"
 import { bytesConverter } from "../../../utils/bytes-converter"
 import { getErrorMessage } from "../../../utils/error-messages"
@@ -19,6 +19,7 @@ import MedusaIcon from "../../fundamentals/icons/medusa-icon"
 import { ActivityCard } from "../../molecules/activity-card"
 import BatchJobFileCard from "../../molecules/batch-job-file-card"
 import { batchJobDescriptionBuilder, BatchJobOperation } from "./utils"
+import CrossIcon from "../../fundamentals/icons/cross-icon"
 
 /**
  * Retrieve a batch job and refresh the data depending on the last batch job status
@@ -67,14 +68,11 @@ const BatchJobActivityCard = (props: { batchJob: BatchJob }) => {
 
   const batchJob = useBatchJob(props.batchJob)
 
-  const {
-    mutate: cancelBatchJob,
-    error: cancelBatchJobError,
-  } = useAdminCancelBatchJob(batchJob.id)
+  const { mutate: cancelBatchJob, error: cancelBatchJobError } =
+    useAdminCancelBatchJob(batchJob.id)
   const { mutateAsync: deleteFile } = useAdminDeleteFile()
-  const {
-    mutateAsync: createPresignedUrl,
-  } = useAdminCreatePresignedDownloadUrl()
+  const { mutateAsync: createPresignedUrl } =
+    useAdminCreatePresignedDownloadUrl()
 
   const fileName = batchJob.result?.file_key ?? `${batchJob.type}.csv`
   const relativeTimeElapsed = getRelativeTime({
@@ -99,6 +97,8 @@ const BatchJobActivityCard = (props: { batchJob: BatchJob }) => {
     batchJob.status !== "completed" &&
     batchJob.status !== "failed" &&
     batchJob.status !== "canceled"
+
+  const hasError = batchJob.status === "failed"
 
   const canDownload =
     batchJob.status === "completed" && batchJob.result?.file_key
@@ -160,7 +160,11 @@ const BatchJobActivityCard = (props: { batchJob: BatchJob }) => {
 
     const icon =
       batchJob.status !== "completed" && batchJob.status !== "canceled" ? (
-        <Spinner size={"medium"} variant={"secondary"} />
+        batchJob.status === "failed" ? (
+          <CrossIcon size={18} />
+        ) : (
+          <Spinner size={"medium"} variant={"secondary"} />
+        )
       ) : (
         <FileIcon
           className={clsx({
@@ -178,7 +182,7 @@ const BatchJobActivityCard = (props: { batchJob: BatchJob }) => {
           preprocessing: `Preparing ${operation.toLowerCase()}...`,
           processing: `Processing ${operation.toLowerCase()}...`,
           completed: `Successful ${operation.toLowerCase()}`,
-          failed: `Failed batch ${operation.toLowerCase()} job`,
+          failed: `Job failed`,
           canceled: `Canceled batch ${operation.toLowerCase()} job`,
         }[batchJob.status]
 
@@ -188,6 +192,8 @@ const BatchJobActivityCard = (props: { batchJob: BatchJob }) => {
         fileName={fileName}
         icon={icon}
         fileSize={fileSize}
+        hasError={hasError}
+        errorMessage={batchJob?.result?.errors?.join(" \n")}
       />
     )
   }
@@ -203,7 +209,7 @@ const BatchJobActivityCard = (props: { batchJob: BatchJob }) => {
         <Button
           onClick={onClick}
           size={"small"}
-          className={clsx("flex justify-start inter-small-regular", className)}
+          className={clsx("inter-small-regular flex justify-start", className)}
           variant={variant}
         >
           {text}
@@ -212,7 +218,7 @@ const BatchJobActivityCard = (props: { batchJob: BatchJob }) => {
     }
     return (
       (canDownload || canCancel) && (
-        <div className="flex mt-6">
+        <div className="mt-6 flex">
           {canDownload && (
             <div className="flex">
               {buildButton(onDeleteFile, "danger", "Delete")}
@@ -233,7 +239,7 @@ const BatchJobActivityCard = (props: { batchJob: BatchJob }) => {
       date={batchJob.created_at}
       shouldShowStatus={true}
     >
-      <div ref={activityCardRef} className="flex flex-col inter-small-regular">
+      <div ref={activityCardRef} className="inter-small-regular flex flex-col">
         <span>{batchJobActivityDescription}</span>
 
         {getBatchJobFileCard()}

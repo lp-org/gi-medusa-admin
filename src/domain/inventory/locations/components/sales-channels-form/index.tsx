@@ -1,10 +1,10 @@
 import { SalesChannel, StockLocationExpandedDTO } from "@medusajs/medusa"
 import { useFieldArray } from "react-hook-form"
+import SalesChannelsModal from "../../../../../components/forms/product/sales-channels-modal"
 import Button from "../../../../../components/fundamentals/button"
 import SalesChannelsList from "../../../../../components/molecules/sales-channels-list"
 import useToggleState from "../../../../../hooks/use-toggle-state"
 import { NestedForm } from "../../../../../utils/nested-form"
-import SalesChannelsModal from "../../../../products/components/sales-channels-modal"
 import { AddSalesChannelsFormType } from "../../../../products/new/add-sales-channels"
 
 const SalesChannelsForm = ({
@@ -47,7 +47,7 @@ const SalesChannelsForm = ({
           Add sales channels
         </Button>
       ) : (
-        <div className="flex items-center justify-between w-full">
+        <div className="flex w-full items-center justify-between">
           <SalesChannelsList
             salesChannels={location?.sales_channels || fields}
             showMax={1}

@@ -1,6 +1,6 @@
 import { Discount } from "@medusajs/medusa"
 import { useAdminDeleteDiscount, useAdminUpdateDiscount } from "medusa-react"
-import React, { useState } from "react"
+import React from "react"
 import { useNavigate } from "react-router-dom"
 import Badge from "../../../../components/fundamentals/badge"
 import EditIcon from "../../../../components/fundamentals/icons/edit-icon"
@@ -10,6 +10,7 @@ import StatusSelector from "../../../../components/molecules/status-selector"
 import BodyCard from "../../../../components/organisms/body-card"
 import useImperativeDialog from "../../../../hooks/use-imperative-dialog"
 import useNotification from "../../../../hooks/use-notification"
+import useToggleState from "../../../../hooks/use-toggle-state"
 import { getErrorMessage } from "../../../../utils/error-messages"
 import { formatAmountWithSymbol } from "../../../../utils/prices"
 import EditGeneral from "./edit-general"
@@ -24,7 +25,6 @@ const General: React.FC<GeneralProps> = ({ discount }) => {
   const notification = useNotification()
   const updateDiscount = useAdminUpdateDiscount(discount.id)
   const deletediscount = useAdminDeleteDiscount(discount.id)
-  const [showmModal, setShowModal] = useState(false)
 
   const onDelete = async () => {
     const shouldDelete = await dialog({
@@ -65,10 +65,12 @@ const General: React.FC<GeneralProps> = ({ discount }) => {
     )
   }
 
+  const { state, open, close } = useToggleState()
+
   const actionables: ActionType[] = [
     {
       label: "Edit general information",
-      onClick: () => setShowModal(true),
+      onClick: open,
       icon: <EditIcon size={20} />,
     },
     {
@@ -88,7 +90,7 @@ const General: React.FC<GeneralProps> = ({ discount }) => {
         forceDropdown
         className="min-h-[200px]"
         status={
-          <div className="flex items-center gap-x-2xsmall">
+          <div className="gap-x-2xsmall flex items-center">
             {discount.is_dynamic && (
               <span>
                 <Badge variant="default">
@@ -108,13 +110,13 @@ const General: React.FC<GeneralProps> = ({ discount }) => {
         }
       >
         <div className="flex">
-          <div className="border-l border-grey-20 pl-6">
+          <div className="border-grey-20 border-l pl-6">
             {getPromotionDescription(discount)}
             <span className="inter-small-regular text-grey-50">
               Discount Amount
             </span>
           </div>
-          <div className="border-l border-grey-20 pl-6 ml-12">
+          <div className="border-grey-20 ml-12 border-l pl-6">
             <h2 className="inter-xlarge-regular text-grey-90">
               {discount.regions.length.toLocaleString("en-US")}
             </h2>
@@ -122,7 +124,7 @@ const General: React.FC<GeneralProps> = ({ discount }) => {
               Valid Regions
             </span>
           </div>
-          <div className="border-l border-grey-20 pl-6 ml-12">
+          <div className="border-grey-20 ml-12 border-l pl-6">
             <h2 className="inter-xlarge-regular text-grey-90">
               {discount.usage_count.toLocaleString("en-US")}
             </h2>
@@ -132,9 +134,8 @@ const General: React.FC<GeneralProps> = ({ discount }) => {
           </div>
         </div>
       </BodyCard>
-      {showmModal && (
-        <EditGeneral discount={discount} onClose={() => setShowModal(false)} />
-      )}
+
+      <EditGeneral discount={discount} onClose={close} open={state} />
     </>
   )
 }

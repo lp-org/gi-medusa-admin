@@ -8,7 +8,7 @@ type SettingsCardProps = {
   description: string
   to?: string
   externalLink?: string
-  disabled: boolean
+  disabled?: boolean
 }
 
 const SettingsCard: React.FC<SettingsCardProps> = ({
@@ -24,9 +24,9 @@ const SettingsCard: React.FC<SettingsCardProps> = ({
   }
 
   return (
-    <Link to={to ?? ""} className="flex items-center flex-1">
+    <Link to={to ?? ""} className="flex flex-1 items-center">
       <button
-        className="flex items-center flex-1 group bg-grey-0 rounded-rounded p-large border border-grey-20 h-full"
+        className="bg-grey-0 rounded-rounded p-large border-grey-20 group flex h-full flex-1 items-center border"
         disabled={disabled}
         onClick={() => {
           if (externalLink) {
@@ -34,10 +34,10 @@ const SettingsCard: React.FC<SettingsCardProps> = ({
           }
         }}
       >
-        <div className="h-2xlarge w-2xlarge bg-violet-20 rounded-circle flex justify-center items-center text-violet-60 group-disabled:bg-grey-10 group-disabled:text-grey-40">
+        <div className="h-2xlarge w-2xlarge bg-grey-10 rounded-circle text-grey-60 group-disabled:bg-grey-10 group-disabled:text-grey-40 flex items-center justify-center">
           {icon}
         </div>
-        <div className="text-left flex-1 mx-large">
+        <div className="mx-large flex-1 text-left">
           <h3 className="inter-large-semibold text-grey-90 group-disabled:text-grey-40 m-0">
             {heading}
           </h3>

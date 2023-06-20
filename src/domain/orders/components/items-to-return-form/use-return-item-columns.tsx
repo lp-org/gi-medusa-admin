@@ -102,12 +102,12 @@ export const useItemsToReturnColumns = ({ form, orderCurrency }: Props) => {
           const value = getValue()
 
           return (
-            <div className="flex items-center gap-x-base py-xsmall">
+            <div className="gap-x-base py-xsmall flex items-center">
               <div>
                 <Thumbnail src={original.thumbnail} />
               </div>
               <div className="inter-small-regular">
-                <div className="flex items-center gap-x-2xsmall">
+                <div className="gap-x-2xsmall flex items-center">
                   <p>{original.product_title}</p>
                   {value && <p className="text-grey-50">({value})</p>}
                 </div>

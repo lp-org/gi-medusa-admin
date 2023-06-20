@@ -1,21 +1,21 @@
+import { StockLocationDTO } from "@medusajs/types"
+import { useAdminDeleteStockLocation } from "medusa-react"
 import React from "react"
-import { StockLocationDTO } from "@medusajs/medusa"
 import IconBadge from "../../../../../components/fundamentals/icon-badge"
 import BuildingsIcon from "../../../../../components/fundamentals/icons/buildings-icon"
-import { countryLookup } from "../../../../../utils/countries"
-import Actionables, {
-  ActionType,
-} from "../../../../../components/molecules/actionables"
 import EditIcon from "../../../../../components/fundamentals/icons/edit-icon"
 import TrashIcon from "../../../../../components/fundamentals/icons/trash-icon"
+import Actionables, {
+  ActionType
+} from "../../../../../components/molecules/actionables"
+import useImperativeDialog from "../../../../../hooks/use-imperative-dialog"
+import useNotification from "../../../../../hooks/use-notification"
 import useToggleState from "../../../../../hooks/use-toggle-state"
+import { useFeatureFlag } from "../../../../../providers/feature-flag-provider"
+import { countryLookup } from "../../../../../utils/countries"
+import { getErrorMessage } from "../../../../../utils/error-messages"
 import LocationEditModal from "../../edit"
 import SalesChannelsSection from "../sales-channels-section"
-import useImperativeDialog from "../../../../../hooks/use-imperative-dialog"
-import { useAdminDeleteStockLocation } from "medusa-react"
-import useNotification from "../../../../../hooks/use-notification"
-import { getErrorMessage } from "../../../../../utils/error-messages"
-import { useFeatureFlag } from "../../../../../context/feature-flag"
 
 type Props = {
   location: StockLocationDTO
@@ -37,7 +37,7 @@ const LocationCard: React.FC<Props> = ({ location }) => {
   const onDelete = async () => {
     const shouldDelete = await dialog({
       heading: "Delete Location",
-      text: "Are you sure you want to delete this location",
+      text: "Are you sure you want to delete this location. This will also delete all inventory levels and reservations associated with this location.",
       extraConfirmation: true,
       entityName: location.name,
     })
@@ -69,13 +69,13 @@ const LocationCard: React.FC<Props> = ({ location }) => {
   ]
 
   return (
-    <div className="border my-base rounded-rounded bg-grey-0 border-grey-20">
-      <div className="flex items-center px-6 py-base">
+    <div className="my-base rounded-rounded bg-grey-0 border-grey-20 border">
+      <div className="py-base flex items-center px-6">
         <IconBadge>
           <BuildingsIcon />
         </IconBadge>
-        <div className="flex flex-col ml-base">
-          <span className="font-semibold text-grey-90">{location.name}</span>
+        <div className="ml-base flex flex-col">
+          <span className="text-grey-90 font-semibold">{location.name}</span>
           {location.address && (
             <div>
               {location.address.city && <span>{location.address.city}, </span>}
@@ -88,8 +88,8 @@ const LocationCard: React.FC<Props> = ({ location }) => {
         </div>
       </div>
       {isFeatureEnabled("sales_channels") && (
-        <div className="px-6 border-t border-solid py-base border-grey-20">
-          <h2 className="text-gray-500 inter-small-semibold">
+        <div className="py-base border-grey-20 border-t border-solid px-6">
+          <h2 className="inter-small-semibold text-gray-500">
             Connected sales channels
           </h2>
           <SalesChannelsSection location={location} />

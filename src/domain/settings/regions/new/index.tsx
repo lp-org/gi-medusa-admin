@@ -7,8 +7,8 @@ import Button from "../../../../components/fundamentals/button"
 import CrossIcon from "../../../../components/fundamentals/icons/cross-icon"
 import FocusModal from "../../../../components/molecules/modal/focus-modal"
 import Accordion from "../../../../components/organisms/accordion"
-import { useFeatureFlag } from "../../../../context/feature-flag"
 import useNotification from "../../../../hooks/use-notification"
+import { useFeatureFlag } from "../../../../providers/feature-flag-provider"
 import { getErrorMessage } from "../../../../utils/error-messages"
 import { nestedForm } from "../../../../utils/nested-form"
 import RegionDetailsForm, {
@@ -91,7 +91,7 @@ const NewRegion = ({ onClose }: Props) => {
     <form className="w-full" onSubmit={onSubmit} noValidate>
       <FocusModal>
         <FocusModal.Header>
-          <div className="flex w-full justify-between px-8 medium:w-8/12">
+          <div className="medium:w-8/12 flex w-full justify-between px-8">
             <Button
               size="small"
               variant="ghost"
@@ -100,7 +100,7 @@ const NewRegion = ({ onClose }: Props) => {
             >
               <CrossIcon size={20} />
             </Button>
-            <div className="flex gap-x-small">
+            <div className="gap-x-small flex">
               <Button
                 size="small"
                 variant="primary"
@@ -114,7 +114,7 @@ const NewRegion = ({ onClose }: Props) => {
           </div>
         </FocusModal.Header>
         <FocusModal.Main className="no-scrollbar flex w-full justify-center">
-          <div className="my-16 max-w-[700px] small:w-4/5 medium:w-7/12 large:w-6/12">
+          <div className="small:w-4/5 medium:w-7/12 large:w-6/12 my-16 max-w-[700px]">
             <Accordion
               value={sections}
               onValueChange={setSections}

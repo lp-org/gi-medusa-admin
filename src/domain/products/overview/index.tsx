@@ -1,7 +1,8 @@
 import { useAdminCreateBatchJob, useAdminCreateCollection } from "medusa-react"
-import React, { useContext, useEffect, useState } from "react"
+import { useEffect, useState } from "react"
 import { useLocation, useNavigate } from "react-router-dom"
 import Fade from "../../../components/atoms/fade-wrapper"
+import Spacer from "../../../components/atoms/spacer"
 import Button from "../../../components/fundamentals/button"
 import ExportIcon from "../../../components/fundamentals/icons/export-icon"
 import PlusIcon from "../../../components/fundamentals/icons/plus-icon"
@@ -14,10 +15,10 @@ import CollectionsTable from "../../../components/templates/collections-table"
 import ProductTable from "../../../components/templates/product-table"
 import useNotification from "../../../hooks/use-notification"
 import useToggleState from "../../../hooks/use-toggle-state"
+import { usePolling } from "../../../providers/polling-provider"
 import { getErrorMessage } from "../../../utils/error-messages"
 import ImportProducts from "../batch-job/import"
 import NewProduct from "../new"
-import { PollingContext } from "../../../context/polling"
 
 const VIEWS = ["products", "collections"]
 
@@ -31,7 +32,7 @@ const Overview = () => {
     open: openProductCreate,
   } = useToggleState()
 
-  const { resetInterval } = useContext(PollingContext)
+  const { resetInterval } = usePolling()
   const createBatchJob = useAdminCreateBatchJob()
 
   const notification = useNotification()
@@ -162,8 +163,8 @@ const Overview = () => {
 
   return (
     <>
-      <div className="flex flex-col grow h-full">
-        <div className="w-full flex flex-col grow">
+      <div className="flex h-full grow flex-col">
+        <div className="flex w-full grow flex-col">
           <BodyCard
             forceDropdown={false}
             customActionable={CurrentAction()}
@@ -178,8 +179,10 @@ const Overview = () => {
           >
             <CurrentView />
           </BodyCard>
+          <Spacer />
         </div>
       </div>
+
       {showNewCollection && (
         <AddCollectionModal
           onClose={() => setShowNewCollection(!showNewCollection)}

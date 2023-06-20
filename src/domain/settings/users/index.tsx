@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react"
-import BreadCrumb from "../../../components/molecules/breadcrumb"
-import Medusa from "../../../services/api"
+import BackButton from "../../../components/atoms/back-button"
+import PlusIcon from "../../../components/fundamentals/icons/plus-icon"
 import BodyCard from "../../../components/organisms/body-card"
 import InviteModal from "../../../components/organisms/invite-modal"
-import PlusIcon from "../../../components/fundamentals/icons/plus-icon"
 import UserTable from "../../../components/templates/user-table"
+import Medusa from "../../../services/api"
 
 const Users: React.FC = () => {
   const [users, setUsers] = useState([])
@@ -44,30 +44,29 @@ const Users: React.FC = () => {
   ]
 
   return (
-    <div className="flex flex-col h-full">
-      <div className="w-full flex flex-col grow">
-        <BreadCrumb
-          previousRoute="/a/settings"
-          previousBreadcrumb="Settings"
-          currentPage="The Team"
+    <div className="flex h-full flex-col">
+      <div className="flex w-full grow flex-col">
+        <BackButton
+          path="/a/settings"
+          label="Back to settings"
+          className="mb-xsmall"
         />
         <BodyCard
           title="The Team"
           subtitle="Manage users of your Medusa Store"
           actionables={actionables}
         >
-          <div className="flex grow  flex-col pt-2">
+          <div className="flex grow flex-col justify-between">
             <UserTable
               users={users}
               invites={invites}
               triggerRefetch={triggerRefetch}
             />
+            <p className="inter-small-regular text-grey-50">
+              {users.length} member
+              {users.length === 1 ? "" : "s"}
+            </p>
           </div>
-          <div className="inter-small-regular text-grey-50">
-            {users.length} member
-            {users.length === 1 ? "" : "s"}
-          </div>
-
           {showInviteModal && (
             <InviteModal
               handleClose={() => {

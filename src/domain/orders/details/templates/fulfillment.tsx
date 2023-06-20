@@ -4,12 +4,14 @@ import {
   useAdminCancelFulfillment,
   useAdminCancelSwapFulfillment,
 } from "medusa-react"
-import React from "react"
+import IconBadge from "../../../../components/fundamentals/icon-badge"
+import BuildingsIcon from "../../../../components/fundamentals/icons/buildings-icon"
 import CancelIcon from "../../../../components/fundamentals/icons/cancel-icon"
 import PackageIcon from "../../../../components/fundamentals/icons/package-icon"
 import Actionables from "../../../../components/molecules/actionables"
 import useImperativeDialog from "../../../../hooks/use-imperative-dialog"
 import useNotification from "../../../../hooks/use-notification"
+import useStockLocations from "../../../../hooks/use-stock-locations"
 import { getErrorMessage } from "../../../../utils/error-messages"
 import { TrackingLink } from "./tracking-link"
 
@@ -24,6 +26,7 @@ export const FormattedFulfillment = ({
   const cancelFulfillment = useAdminCancelFulfillment(order.id)
   const cancelSwapFulfillment = useAdminCancelSwapFulfillment(order.id)
   const cancelClaimFulfillment = useAdminCancelClaimFulfillment(order.id)
+  const { getLocationNameById } = useStockLocations()
 
   const { fulfillment } = fulfillmentObj
   const hasLinks = !!fulfillment.tracking_links?.length
@@ -81,7 +84,11 @@ export const FormattedFulfillment = ({
       default:
         return cancelFulfillment.mutate(fulfillment.id, {
           onSuccess: () =>
-            notification("Success", "Successfully canceled order", "success"),
+            notification(
+              "Success",
+              "Successfully canceled fulfillment",
+              "success"
+            ),
           onError: (err) =>
             notification("Error", getErrorMessage(err), "error"),
         })
@@ -90,7 +97,7 @@ export const FormattedFulfillment = ({
 
   return (
     <div className="flex w-full justify-between">
-      <div className="flex flex-col space-y-1 py-2">
+      <div className="flex flex-col space-y-1 py-4">
         <div className="text-grey-90">
           {fulfillment.canceled_at
             ? "Fulfillment has been canceled"
@@ -98,13 +105,26 @@ export const FormattedFulfillment = ({
                 fulfillment.provider_id
               )}`}
         </div>
-        <div className="flex text-grey-50">
+        <div className="text-grey-50 flex">
           {!fulfillment.shipped_at ? "Not shipped" : "Tracking"}
           {hasLinks &&
             fulfillment.tracking_links.map((tl, j) => (
               <TrackingLink key={j} trackingLink={tl} />
             ))}
         </div>
+        {!fulfillment.canceled_at && fulfillment.location_id && (
+          <div className="flex flex-col">
+            <div className="text-grey-50 font-semibold">
+              {fulfillment.shipped_at ? "Shipped" : "Shipping"} from{" "}
+            </div>
+            <div className="flex items-center pt-2">
+              <IconBadge className="mr-2">
+                <BuildingsIcon />
+              </IconBadge>
+              {getLocationNameById(fulfillment.location_id)}
+            </div>
+          </div>
+        )}
       </div>
       {!fulfillment.canceled_at && !fulfillment.shipped_at && (
         <div className="flex items-center space-x-2">

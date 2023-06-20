@@ -1,8 +1,8 @@
 import { lazy, Suspense } from "react"
 import {
-  Route,
   createBrowserRouter,
   createRoutesFromElements,
+  Route,
   RouterProvider,
 } from "react-router-dom"
 import Spinner from "./components/atoms/spinner"
@@ -24,11 +24,14 @@ const router = createBrowserRouter(
       <Route path="reset-password" element={<ResetPasswordPage />} />
       <Route path="*" element={<NotFound />} />
     </>
-  )
+  ),
+  {
+    basename: __BASE__,
+  }
 )
 
 const Loading = () => (
-  <div className="flex w-full h-screen justify-center items-center bg-grey-5 text-grey-90">
+  <div className="bg-grey-5 text-grey-90 flex h-screen w-full items-center justify-center">
     <Spinner variant="secondary" />
   </div>
 )

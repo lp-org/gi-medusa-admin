@@ -1,7 +1,7 @@
 import { PricedVariant } from "@medusajs/medusa/dist/types/pricing"
 import { flexRender, Table as Instance } from "@tanstack/react-table"
 import { useEffect, useState } from "react"
-import LoadingContainer from "../../../../../components/loading-container"
+import LoadingContainer from "../../../../../components/atoms/loading-container"
 import Table from "../../../../../components/molecules/table"
 
 type Props = {

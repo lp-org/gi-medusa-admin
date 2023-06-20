@@ -1,6 +1,7 @@
 import React, { useCallback } from "react"
 import Collapsible from "react-collapsible"
 import { NavLink } from "react-router-dom"
+import Badge from "../../fundamentals/badge"
 
 type SidebarMenuSubitemProps = {
   pageLink: string
@@ -13,6 +14,7 @@ type SidebarMenuItemProps = {
   icon: JSX.Element
   triggerHandler: () => any
   subItems?: SidebarMenuSubitemProps[]
+  isNew?: boolean
 }
 
 const SidebarMenuItem: React.FC<SidebarMenuItemProps> & {
@@ -23,6 +25,7 @@ const SidebarMenuItem: React.FC<SidebarMenuItemProps> & {
   text,
   triggerHandler,
   subItems = [],
+  isNew,
 }: SidebarMenuItemProps) => {
   const styles =
     "group py-1.5 my-0.5 rounded-rounded flex text-grey-50 hover:bg-grey-10 items-center px-2"
@@ -40,7 +43,12 @@ const SidebarMenuItem: React.FC<SidebarMenuItemProps> & {
       trigger={
         <NavLink className={classNameFn} to={pageLink}>
           <span className="items-start">{icon}</span>
-          <span className="ml-3 group-[.is-active]:text-grey-90">{text}</span>
+          <span className="group-[.is-active]:text-grey-90 ml-3">{text}</span>
+          {isNew && (
+            <Badge variant={"new-feature"} className="ml-auto">
+              New
+            </Badge>
+          )}
         </NavLink>
       }
     >
@@ -62,7 +70,7 @@ const SubItem = ({ pageLink, text }: SidebarMenuSubitemProps) => {
 
   return (
     <NavLink className={classNameFn} to={pageLink}>
-      <span className="ml-3 text-grey-90 text-small">{text}</span>
+      <span className="text-grey-90 text-small ml-3">{text}</span>
     </NavLink>
   )
 }

@@ -1,35 +1,46 @@
-import { AdminPostProductsReq } from "@medusajs/medusa"
-import { useAdminCreateProduct } from "medusa-react"
-import { useEffect } from "react"
+import { AdminPostProductsReq, ProductVariant } from "@medusajs/medusa"
+import { useAdminCreateProduct, useMedusa } from "medusa-react"
 import { useForm, useWatch } from "react-hook-form"
+import CustomsForm, {
+  CustomsFormType,
+} from "../../../components/forms/product/customs-form"
+import DimensionsForm, {
+  DimensionsFormType,
+} from "../../../components/forms/product/dimensions-form"
+import DiscountableForm, {
+  DiscountableFormType,
+} from "../../../components/forms/product/discountable-form"
+import GeneralForm, {
+  GeneralFormType,
+} from "../../../components/forms/product/general-form"
+import MediaForm, {
+  MediaFormType,
+} from "../../../components/forms/product/media-form"
+import OrganizeForm, {
+  OrganizeFormType,
+} from "../../../components/forms/product/organize-form"
+import ThumbnailForm, {
+  ThumbnailFormType,
+} from "../../../components/forms/product/thumbnail-form"
+import { FormImage, ProductStatus } from "../../../types/shared"
+import AddSalesChannelsForm, {
+  AddSalesChannelsFormType,
+} from "./add-sales-channels"
+import AddVariantsForm, { AddVariantsFormType } from "./add-variants"
+
+import { useEffect } from "react"
 import { useNavigate } from "react-router-dom"
+import { PricesFormType } from "../../../components/forms/general/prices-form"
 import Button from "../../../components/fundamentals/button"
 import FeatureToggle from "../../../components/fundamentals/feature-toggle"
 import CrossIcon from "../../../components/fundamentals/icons/cross-icon"
 import FocusModal from "../../../components/molecules/modal/focus-modal"
 import Accordion from "../../../components/organisms/accordion"
-import { useFeatureFlag } from "../../../context/feature-flag"
 import useNotification from "../../../hooks/use-notification"
-import { FormImage, ProductStatus } from "../../../types/shared"
+import { useFeatureFlag } from "../../../providers/feature-flag-provider"
 import { getErrorMessage } from "../../../utils/error-messages"
 import { prepareImages } from "../../../utils/images"
 import { nestedForm } from "../../../utils/nested-form"
-import CustomsForm, { CustomsFormType } from "../components/customs-form"
-import DimensionsForm, {
-  DimensionsFormType,
-} from "../components/dimensions-form"
-import DiscountableForm, {
-  DiscountableFormType,
-} from "../components/discountable-form"
-import GeneralForm, { GeneralFormType } from "../components/general-form"
-import MediaForm, { MediaFormType } from "../components/media-form"
-import OrganizeForm, { OrganizeFormType } from "../components/organize-form"
-import { PricesFormType } from "../components/prices-form"
-import ThumbnailForm, { ThumbnailFormType } from "../components/thumbnail-form"
-import AddSalesChannelsForm, {
-  AddSalesChannelsFormType,
-} from "./add-sales-channels"
-import AddVariantsForm, { AddVariantsFormType } from "./add-variants"
 
 type NewProductForm = {
   general: GeneralFormType
@@ -84,6 +95,18 @@ const NewProduct = ({ onClose }: Props) => {
 
   const onSubmit = (publish = true) =>
     handleSubmit(async (data) => {
+      const optionsToStockLocationsMap = new Map(
+        data.variants.entries.map((variant) => {
+          return [
+            variant.options
+              .map(({ option }) => option?.value || "")
+              .sort()
+              .join(","),
+            variant.stock.stock_location,
+          ]
+        })
+      )
+
       const payload = createPayload(
         data,
         publish,
@@ -142,8 +165,13 @@ const NewProduct = ({ onClose }: Props) => {
 
       mutate(payload, {
         onSuccess: ({ product }) => {
-          closeAndReset()
-          navigate(`/a/products/${product.id}`)
+          createStockLocationsForVariants(
+            product.variants,
+            optionsToStockLocationsMap
+          ).then(() => {
+            closeAndReset()
+            navigate(`/a/products/${product.id}`)
+          })
         },
         onError: (err) => {
           notification("Error", getErrorMessage(err), "error")
@@ -151,11 +179,54 @@ const NewProduct = ({ onClose }: Props) => {
       })
     })
 
+  const { client } = useMedusa()
+
+  const createStockLocationsForVariants = async (
+    variants: ProductVariant[],
+    stockLocationsMap: Map<
+      string,
+      { stocked_quantity: number; location_id: string }[] | undefined
+    >
+  ) => {
+    await Promise.all(
+      variants
+        .map(async (variant) => {
+          const optionsKey = variant.options
+            .map((option) => option?.value || "")
+            .sort()
+            .join(",")
+
+          const stock_locations = stockLocationsMap.get(optionsKey)
+          if (!stock_locations?.length) {
+            return
+          }
+
+          const inventory = await client.admin.variants.getInventory(variant.id)
+
+          return await Promise.all(
+            inventory.variant.inventory
+              .map(async (item) => {
+                return Promise.all(
+                  stock_locations.map(async (stock_location) => {
+                    client.admin.inventoryItems.createLocationLevel(item.id!, {
+                      location_id: stock_location.location_id,
+                      stocked_quantity: stock_location.stocked_quantity,
+                    })
+                  })
+                )
+              })
+              .flat()
+          )
+        })
+        .flat()
+    )
+  }
+
   return (
     <form className="w-full">
       <FocusModal>
         <FocusModal.Header>
-          <div className="flex justify-between w-full px-8 medium:w-8/12">
+          <div className="medium:w-8/12 flex w-full justify-between px-8">
             <Button
               size="small"
               variant="ghost"
@@ -164,7 +235,7 @@ const NewProduct = ({ onClose }: Props) => {
             >
               <CrossIcon size={20} />
             </Button>
-            <div className="flex gap-x-small">
+            <div className="gap-x-small flex">
               <Button
                 size="small"
                 variant="secondary"
@@ -186,8 +257,8 @@ const NewProduct = ({ onClose }: Props) => {
             </div>
           </div>
         </FocusModal.Header>
-        <FocusModal.Main className="flex justify-center w-full no-scrollbar">
-          <div className="medium:w-7/12 large:w-6/12 small:w-4/5 max-w-[700px] my-16">
+        <FocusModal.Main className="no-scrollbar flex w-full justify-center py-16">
+          <div className="small:w-4/5 medium:w-7/12 large:w-6/12 max-w-[700px]">
             <Accordion defaultValue={["general"]} type="multiple">
               <Accordion.Item
                 value={"general"}
@@ -197,7 +268,7 @@ const NewProduct = ({ onClose }: Props) => {
                 <p className="inter-base-regular text-grey-50">
                   To start selling, all you need is a name and a price.
                 </p>
-                <div className="flex flex-col mt-xlarge gap-y-xlarge">
+                <div className="mt-xlarge gap-y-xlarge flex flex-col">
                   <GeneralForm
                     form={nestedForm(form, "general")}
                     requireHandle={false}
@@ -209,7 +280,7 @@ const NewProduct = ({ onClose }: Props) => {
                 <p className="inter-base-regular text-grey-50">
                   To start selling, all you need is a name and a price.
                 </p>
-                <div className="flex flex-col mt-xlarge gap-y-xlarge pb-xsmall">
+                <div className="mt-xlarge gap-y-xlarge pb-xsmall flex flex-col">
                   <div>
                     <h3 className="inter-base-semibold mb-base">
                       Organize Product
@@ -226,7 +297,7 @@ const NewProduct = ({ onClose }: Props) => {
                 </div>
               </Accordion.Item>
               <Accordion.Item title="Variants" value="variants">
-                <p className="text-grey-50 inter-base-regular">
+                <p className="inter-base-regular text-grey-50">
                   Add variations of this product.
                   <br />
                   Offer your customers different options for color, format,
@@ -254,14 +325,14 @@ const NewProduct = ({ onClose }: Props) => {
                 </div>
               </Accordion.Item>
               <Accordion.Item title="Thumbnail" value="thumbnail">
-                <p className="inter-base-regular text-grey-50 mb-large">
+                <p className="inter-base-regular mb-large text-grey-50">
                   Used to represent your product during checkout, social sharing
                   and more.
                 </p>
                 <ThumbnailForm form={nestedForm(form, "thumbnail")} />
               </Accordion.Item>
               <Accordion.Item title="Media" value="media">
-                <p className="inter-base-regular text-grey-50 mb-large">
+                <p className="inter-base-regular mb-large text-grey-50">
                   Add images to your product.
                 </p>
                 <MediaForm form={nestedForm(form, "media")} />
@@ -304,6 +375,9 @@ const createPayload = (
       ? data.organize.tags.map((t) => ({
           value: t,
         }))
+      : undefined,
+    categories: data.organize.categories?.length
+      ? data.organize.categories.map((id) => ({ id }))
       : undefined,
     origin_country: data.customs.origin_country?.value || undefined,
     options: data.variants.options.map((o) => ({
@@ -371,6 +445,7 @@ const createBlank = (): NewProductForm => {
       images: [],
     },
     organize: {
+      categories: null,
       collection: null,
       tags: null,
       type: null,

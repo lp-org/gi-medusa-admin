@@ -5,22 +5,26 @@ import React from "react"
 /**
  * A controlled switch component atom.
  */
-function Switch(props: RadixSwitch.SwitchProps) {
-  return (
-    <RadixSwitch.Root
-      {...props}
-      disabled={props.disabled}
-      className={clsx(
-        "w-8 h-[18px] rounded-full transition-bg bg-gray-300 radix-state-checked:bg-violet-60"
-      )}
-    >
-      <RadixSwitch.Thumb
+const Switch = React.forwardRef<HTMLButtonElement, RadixSwitch.SwitchProps>(
+  (props, ref) => {
+    return (
+      <RadixSwitch.Root
+        ref={ref}
+        {...props}
         className={clsx(
-          "w-2 h-2 bg-white rounded-full block transition-transform translate-x-[5px] radix-state-checked:translate-x-[19px]"
+          "transition-bg radix-state-checked:bg-violet-60 h-[18px] w-8 rounded-full bg-gray-300"
         )}
-      />
-    </RadixSwitch.Root>
-  )
-}
+      >
+        <RadixSwitch.Thumb
+          className={clsx(
+            "radix-state-checked:translate-x-[19px] block h-2 w-2 translate-x-[5px] rounded-full bg-white transition-transform"
+          )}
+        />
+      </RadixSwitch.Root>
+    )
+  }
+)
+
+Switch.displayName = "Switch"
 
 export default Switch

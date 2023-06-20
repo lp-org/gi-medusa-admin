@@ -1,4 +1,5 @@
-import { Country, StockLocationAddressDTO } from "@medusajs/medusa"
+import { Country } from "@medusajs/medusa"
+import { StockLocationAddressDTO } from "@medusajs/types"
 import { useAdminRegions } from "medusa-react"
 import { useEffect, useMemo, useState } from "react"
 import { Controller, useWatch } from "react-hook-form"
@@ -59,18 +60,18 @@ const AddressForm = ({
   return (
     <>
       <span className="inter-base-semibold">Address</span>
-      <div className="grid grid-cols-1 gap-y-large gap-x-large">
-        <div className="grid grid-cols-2 gap-x-large">
+      <div className="gap-y-large gap-x-large grid grid-cols-1">
+        <div className="gap-x-large grid grid-cols-2">
           <InputField
             label="Company"
-            placeholder="Medusa"
+            placeholder="Company"
             errors={errors}
             {...register(path("company"), {
               pattern: FormValidator.whiteSpaceRule("Company"),
             })}
           />
         </div>
-        <div className="grid grid-cols-2 gap-x-large">
+        <div className="gap-x-large grid grid-cols-2">
           <InputField
             label="Address 1"
             placeholder="Address 1"
@@ -78,7 +79,9 @@ const AddressForm = ({
             required={addressFieldsRequired}
             {...register(path("address_1"), {
               pattern: FormValidator.whiteSpaceRule("Address 1"),
-              required: addressFieldsRequired,
+              required: addressFieldsRequired
+                ? "This field is required"
+                : undefined,
             })}
           />
           <InputField
@@ -90,7 +93,7 @@ const AddressForm = ({
             })}
           />
         </div>
-        <div className="grid grid-cols-2 gap-x-large">
+        <div className="gap-x-large grid grid-cols-2">
           <InputField
             label="Postal code"
             placeholder="Postal code"
@@ -108,12 +111,14 @@ const AddressForm = ({
             })}
           />
         </div>
-        <div className="grid grid-cols-2 gap-x-large">
+        <div className="gap-x-large grid grid-cols-2 pb-0.5">
           <Controller
             control={control}
             name={path("country_code")}
             rules={{
-              required: addressFieldsRequired,
+              required: addressFieldsRequired
+                ? "This field is required"
+                : undefined,
             }}
             render={({ field: { value, onChange } }) => {
               let fieldValue:
