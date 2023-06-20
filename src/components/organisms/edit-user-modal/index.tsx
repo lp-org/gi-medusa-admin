@@ -1,13 +1,18 @@
 import { User } from "@medusajs/medusa"
 import { useAdminUpdateUser } from "medusa-react"
-import React, { useEffect } from "react"
-import { useForm } from "react-hook-form"
+import React, { useEffect, useMemo } from "react"
+import { Controller, useForm } from "react-hook-form"
 import useNotification from "../../../hooks/use-notification"
 import { getErrorMessage } from "../../../utils/error-messages"
 import FormValidator from "../../../utils/form-validator"
 import Button from "../../fundamentals/button"
 import InputField from "../../molecules/input"
 import Modal from "../../molecules/modal"
+import { useMutation, useQuery } from "@tanstack/react-query"
+import api from "../../../services/api"
+import Select from "../../molecules/select"
+import { Role } from "../../../types/shared"
+import { Link, NavLink } from "react-router-dom"
 
 type EditUserModalProps = {
   handleClose: () => void
@@ -18,6 +23,7 @@ type EditUserModalProps = {
 type EditUserModalFormData = {
   first_name: string
   last_name: string
+  role: Role
 }
 
 const EditUserModal: React.FC<EditUserModalProps> = ({
@@ -25,34 +31,53 @@ const EditUserModal: React.FC<EditUserModalProps> = ({
   user,
   onSuccess,
 }) => {
-  const { mutate, isLoading } = useAdminUpdateUser(user.id)
+  const { mutate, isLoading } = useMutation({ mutationFn: api.users.update })
   const {
     register,
     handleSubmit,
     reset,
+    control,
     formState: { errors },
   } = useForm<EditUserModalFormData>()
   const notification = useNotification()
 
   useEffect(() => {
-    reset(mapUser(user))
+    reset(mapUser)
   }, [user])
 
   const onSubmit = (data: EditUserModalFormData) => {
-    mutate(data, {
-      onSuccess: () => {
-        notification("Success", `User was updated`, "success")
-        onSuccess()
-      },
-      onError: (error) => {
-        notification("Error", getErrorMessage(error), "error")
-      },
-      onSettled: () => {
-        handleClose()
-      },
-    })
+    const { role, ...payload } = data
+    mutate(
+      { userId: user.id, data: { ...payload, role_id: role.value } },
+      {
+        onSuccess: () => {
+          notification("Success", `User was updated`, "success")
+          onSuccess()
+        },
+        onError: (error) => {
+          notification("Error", getErrorMessage(error), "error")
+        },
+        onSettled: () => {
+          handleClose()
+        },
+      }
+    )
   }
+  const { data } = useQuery({ queryFn: api.roles.list, queryKey: ["roleList"] })
 
+  const roleOptions = useMemo(() => {
+    const list = data?.data.data
+    return list ? list.map((el) => ({ value: el.id, label: el.name })) : []
+  }, [data])
+  const mapUser: EditUserModalFormData = useMemo(() => {
+    const selectedRole = roleOptions.find((el) => el.value === user.role_id)
+
+    return {
+      first_name: user.first_name,
+      last_name: user.last_name,
+      role: selectedRole,
+    }
+  }, [roleOptions, user])
   return (
     <Modal handleClose={handleClose}>
       <form onSubmit={handleSubmit(onSubmit)}>
@@ -61,7 +86,7 @@ const EditUserModal: React.FC<EditUserModalProps> = ({
             <span className="inter-xlarge-semibold">Edit User</span>
           </Modal.Header>
           <Modal.Content>
-            <div className="w-full grid grid-cols-2 gap-large mb-base">
+            <div className="mb-base grid w-full grid-cols-2 gap-large">
               <InputField
                 label="First Name"
                 placeholder="First name..."
@@ -84,11 +109,33 @@ const EditUserModal: React.FC<EditUserModalProps> = ({
                 })}
                 errors={errors}
               />
+              <Controller
+                name="role"
+                control={control}
+                render={({ field: { value, onChange } }) => {
+                  return (
+                    <Select
+                      label="Role"
+                      onChange={onChange}
+                      options={roleOptions}
+                      value={value}
+                    />
+                  )
+                }}
+              />
+              <div className="flex">
+                <Link
+                  to={"/a/settings/role"}
+                  className="mt-7 hover:text-blue-600 hover:underline"
+                >
+                  Role management
+                </Link>
+              </div>
             </div>
             <InputField label="Email" disabled value={user.email} />
           </Modal.Content>
           <Modal.Footer>
-            <div className="w-full flex justify-end">
+            <div className="flex w-full justify-end">
               <Button
                 variant="ghost"
                 size="small"
@@ -111,13 +158,6 @@ const EditUserModal: React.FC<EditUserModalProps> = ({
       </form>
     </Modal>
   )
-}
-
-const mapUser = (user: User): EditUserModalFormData => {
-  return {
-    first_name: user.first_name,
-    last_name: user.last_name,
-  }
 }
 
 export default EditUserModal

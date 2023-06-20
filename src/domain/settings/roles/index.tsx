@@ -42,7 +42,6 @@ const Roles = () => {
         <AddRoleModal
           handleClose={() => {
             setModalOpen(false)
-            queryClient.invalidateQueries({ queryKey: ["roleList"] })
           }}
         />
       )}

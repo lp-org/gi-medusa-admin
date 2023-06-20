@@ -28,7 +28,7 @@ export type PaginationProps = {
 export type Idable = { id: string; [x: string]: any }
 
 export type Role = {
-  value: "admin" | "member" | "developer"
+  value: string
   label: string
 }
 
@@ -52,4 +52,9 @@ export interface DragItem {
 
 export type Subset<K> = {
   [attr in keyof K]?: K[attr] extends object ? Subset<K[attr]> : K[attr]
+}
+
+export type PermissionType = {
+  id: string
+  name: string
 }

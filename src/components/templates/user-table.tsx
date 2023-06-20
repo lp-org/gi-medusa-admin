@@ -95,8 +95,8 @@ const UserTable: React.FC<UserTableProps> = ({
         </Table.Cell>
         <Table.Cell className="w-80">{user.email}</Table.Cell>
         <Table.Cell className="inter-small-semibold text-violet-60">
-          {user.role.charAt(0).toUpperCase()}
-          {user.role.slice(1)}
+          {user?.teamRole?.name.charAt(0).toUpperCase()}
+          {user?.teamRole?.name.slice(1)}
         </Table.Cell>
         <Table.Cell></Table.Cell>
       </Table.Row>
@@ -154,10 +154,15 @@ const UserTable: React.FC<UserTableProps> = ({
         <Table.Cell className="text-grey-40">
           <SidebarTeamMember user={{ email: invite.user_email }} />
         </Table.Cell>
-        <Table.Cell className="text-grey-40 w-80">
+        <Table.Cell className="w-80 text-grey-40">
           {invite.user_email}
         </Table.Cell>
-        <Table.Cell></Table.Cell>
+
+        <Table.Cell className="inter-small-semibold text-violet-60 opacity-50">
+          {invite?.teamRole?.name.charAt(0).toUpperCase()}
+          {invite?.teamRole?.name.slice(1)}
+        </Table.Cell>
+
         <Table.Cell>
           {new Date(invite?.expires_at) < new Date() ? (
             <StatusIndicator title={"Expired"} variant={"danger"} />
@@ -273,7 +278,7 @@ const UserTable: React.FC<UserTableProps> = ({
   }
 
   return (
-    <div className="w-full h-full overflow-y-auto">
+    <div className="h-full w-full overflow-y-auto">
       <Table
         filteringOptions={filteringOptions}
         enableSearch

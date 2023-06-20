@@ -1,5 +1,5 @@
 import { useAdminCreateInvite } from "medusa-react"
-import React from "react"
+import React, { useMemo } from "react"
 import { Controller, useForm } from "react-hook-form"
 import useNotification from "../../../hooks/use-notification"
 import { Role } from "../../../types/shared"
@@ -8,6 +8,8 @@ import Button from "../../fundamentals/button"
 import InputField from "../../molecules/input"
 import Modal from "../../molecules/modal"
 import Select from "../../molecules/select"
+import { useMutation, useQuery } from "@tanstack/react-query"
+import api from "../../../services/api"
 
 type InviteModalProps = {
   handleClose: () => void
@@ -21,7 +23,7 @@ type InviteModalFormData = {
 const InviteModal: React.FC<InviteModalProps> = ({ handleClose }) => {
   const notification = useNotification()
 
-  const { mutate, isLoading } = useAdminCreateInvite()
+  const { mutate, isLoading } = useMutation({ mutationFn: api.invites.create })
 
   const { control, register, handleSubmit } = useForm<InviteModalFormData>()
 
@@ -29,7 +31,7 @@ const InviteModal: React.FC<InviteModalProps> = ({ handleClose }) => {
     mutate(
       {
         user: data.user,
-        role: data.role.value,
+        role_id: data.role.value,
       },
       {
         onSuccess: () => {
@@ -43,11 +45,12 @@ const InviteModal: React.FC<InviteModalProps> = ({ handleClose }) => {
     )
   }
 
-  const roleOptions: Role[] = [
-    { value: "member", label: "Member" },
-    { value: "admin", label: "Admin" },
-    { value: "developer", label: "Developer" },
-  ]
+  const { data } = useQuery({ queryFn: api.roles.list, queryKey: ["roleList"] })
+
+  const roleOptions = useMemo(() => {
+    const list = data?.data.data
+    return list ? list.map((el) => ({ value: el.id, label: el.name })) : []
+  }, [data])
 
   return (
     <Modal handleClose={handleClose}>
@@ -67,7 +70,7 @@ const InviteModal: React.FC<InviteModalProps> = ({ handleClose }) => {
               <Controller
                 name="role"
                 control={control}
-                defaultValue={{ label: "Member", value: "member" }}
+                defaultValue={roleOptions[0]}
                 render={({ field: { value, onChange } }) => {
                   return (
                     <Select

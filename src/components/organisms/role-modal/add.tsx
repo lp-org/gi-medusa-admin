@@ -8,28 +8,39 @@ import { useMutation } from "@tanstack/react-query"
 import api from "../../../services/api"
 import useNotification from "../../../hooks/use-notification"
 import { getErrorMessage } from "../../../utils/error-messages"
+import queryClient from "../../../services/queryClient"
 type ModalProps = {
+  payloadData?: any
   handleClose: () => void
 }
 type AddRoleModalFormData = {
+  id?: string
   name: string
 }
 
-const AddRoleModal: React.FC<ModalProps> = ({ handleClose }) => {
+const AddRoleModal: React.FC<ModalProps> = ({ payloadData, handleClose }) => {
   const notification = useNotification()
   const { mutate, isLoading } = useMutation({
-    mutationFn: api.roles.add,
+    mutationFn: payloadData ? api.roles.update : api.roles.add,
     onSuccess: () => {
-      notification("Success", `Role added`, "success")
+      notification(
+        "Success",
+        payloadData ? `Role updated` : `Role added`,
+        "success"
+      )
+      queryClient.invalidateQueries({ queryKey: ["roleList"] })
       handleClose()
     },
     onError: (error) => {
       notification("Error", getErrorMessage(error), "error")
     },
   })
-  const { control, register, handleSubmit } = useForm<AddRoleModalFormData>()
+  const { register, handleSubmit } = useForm<AddRoleModalFormData>({
+    defaultValues: payloadData || {},
+  })
   const onSubmit = (data: AddRoleModalFormData) => {
-    mutate(data)
+    const { id, name } = data
+    payloadData ? mutate({ roleId: id, data: { name } }) : mutate(data)
   }
   return (
     <div>
@@ -37,7 +48,9 @@ const AddRoleModal: React.FC<ModalProps> = ({ handleClose }) => {
         <form onSubmit={handleSubmit(onSubmit)}>
           <Modal.Body>
             <Modal.Header handleClose={handleClose}>
-              <span className="inter-xlarge-semibold">Add new role</span>
+              <span className="inter-xlarge-semibold">
+                {payloadData ? "Edit role" : "Add new role"}
+              </span>
             </Modal.Header>
             <Modal.Content>
               <div className="flex flex-col gap-y-base">

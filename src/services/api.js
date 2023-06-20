@@ -688,7 +688,7 @@ export default {
       return medusaRequest("DELETE", path)
     },
     list() {
-      const path = `/admin/invites`
+      const path = `/admin/invites?expand=teamRole`
       return medusaRequest("GET", path)
     },
     accept(data) {
@@ -707,7 +707,7 @@ export default {
     },
 
     list() {
-      const path = `/admin/users`
+      const path = `/admin/users?expand=teamRole`
       return medusaRequest("GET", path)
     },
 
@@ -716,7 +716,7 @@ export default {
       return medusaRequest("GET", path)
     },
 
-    update(userId, data) {
+    update({ userId, data }) {
       const path = `/admin/users/${userId}`
       return medusaRequest("POST", path, data)
     },
@@ -736,9 +736,33 @@ export default {
       const path = `/admin/roles`
       return medusaRequest("POST", path, data)
     },
-    update(roleId, data) {
+    update({ roleId, data }) {
       const path = `/admin/roles/${roleId}`
-      return medusaRequest("GET", path, data)
+      return medusaRequest("PUT", path, data)
+    },
+    get(roleId) {
+      const path = `/admin/roles/${roleId}`
+      return medusaRequest("GET", path)
+    },
+    delete(roleId) {
+      const path = `/admin/roles/${roleId}`
+      return medusaRequest("DELETE", path)
+    },
+  },
+
+  permissions: {
+    list(search = {}) {
+      console.log(search)
+      const params = Object.keys(search)
+        .map((k) => `${k}=${search[k]}`)
+        .join("&")
+      console.log(params)
+      const path = `/admin/permissions${params && `?${params}`}`
+      return medusaRequest("GET", path)
+    },
+    setRolePermission({ roleId, data }) {
+      const path = `/admin/permissions/role/${roleId}`
+      return medusaRequest("PUT", path, data)
     },
   },
 }
