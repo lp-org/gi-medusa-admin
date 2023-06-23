@@ -55,7 +55,7 @@ const Item: React.FC<AccordionItemProps> = ({
     <AccordionPrimitive.Item
       {...props}
       className={clsx(
-        "group border-b border-grey-20 last:mb-0",
+        "border-grey-20 group border-b last:mb-0",
         { "opacity-30": props.disabled },
         paddingClasses,
         className
@@ -65,7 +65,7 @@ const Item: React.FC<AccordionItemProps> = ({
         <AccordionPrimitive.Trigger className="w-full" asChild>
           <div className="flex flex-col">
             <div className="flex w-full items-center justify-between">
-              <div className="flex items-center gap-x-2xsmall">
+              <div className="gap-x-2xsmall flex items-center">
                 <span className={headerClass}>
                   {title}
                   {required && <span className="text-rose-50">*</span>}
@@ -85,7 +85,7 @@ const Item: React.FC<AccordionItemProps> = ({
       <AccordionPrimitive.Content
         forceMount={forceMountContent}
         className={clsx(
-          "overflow-hidden px-1 radix-state-closed:animate-accordion-close radix-state-open:animate-accordion-open"
+          "radix-state-closed:animate-accordion-close radix-state-open:animate-accordion-open radix-state-closed:pointer-events-none px-1"
         )}
       >
         <div className="inter-base-regular group-radix-state-closed:animate-accordion-close">
@@ -101,10 +101,10 @@ Accordion.Item = Item
 
 const MorphingTrigger = () => {
   return (
-    <div className="btn-ghost group relative rounded-rounded p-[6px]">
+    <div className="btn-ghost rounded-rounded group relative p-[6px]">
       <div className="h-5 w-5">
-        <span className="absolute inset-y-[31.75%] left-[48%] right-1/2 w-[1.5px] rounded-circle bg-grey-50 duration-300 group-radix-state-open:rotate-90" />
-        <span className="absolute inset-x-[31.75%] top-[48%] bottom-1/2 h-[1.5px] rounded-circle bg-grey-50 duration-300 group-radix-state-open:left-1/2 group-radix-state-open:right-1/2 group-radix-state-open:rotate-90" />
+        <span className="bg-grey-50 rounded-circle group-radix-state-open:rotate-90 absolute inset-y-[31.75%] left-[48%] right-1/2 w-[1.5px] duration-300" />
+        <span className="bg-grey-50 rounded-circle group-radix-state-open:rotate-90 group-radix-state-open:left-1/2 group-radix-state-open:right-1/2 absolute inset-x-[31.75%] top-[48%] bottom-1/2 h-[1.5px] duration-300" />
       </div>
     </div>
   )

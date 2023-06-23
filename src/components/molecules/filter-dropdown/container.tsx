@@ -1,4 +1,5 @@
 import * as RadixPopover from "@radix-ui/react-popover"
+
 import React, {
   PropsWithChildren,
   ReactNode,
@@ -6,8 +7,9 @@ import React, {
   useRef,
   useState,
 } from "react"
-import { useWindowDimensions } from "../../../hooks/use-window-dimensions"
+
 import Button from "../../fundamentals/button"
+import { useWindowDimensions } from "../../../hooks/use-window-dimensions"
 
 type FilterDropdownContainerProps = {
   submitFilters: () => void
@@ -52,13 +54,25 @@ const FilterDropdownContainer = ({
       <RadixPopover.Content
         sideOffset={8}
         style={heightStyle}
-        className="bg-grey-0 overflow-y-auto rounded-rounded shadow-dropdown max-w-[272px] py-4 z-40"
+        className="bg-grey-0 rounded-rounded shadow-dropdown z-40 max-w-[320px] overflow-y-auto pt-1"
       >
-        <div className="flex px-4 pb-4 border-b border-grey-20">
+        {React.Children.toArray(children)
+          .filter(Boolean)
+          .map((child, idx) => {
+            return (
+              <div
+                key={idx}
+                className="border-grey-20 border-b last:border-0 last:pb-0"
+              >
+                {child}
+              </div>
+            )
+          })}
+        <div className="border-grey-20 gap-x-small flex grid grid-cols-2 border-b px-3 py-2.5">
           <Button
             size="small"
             tabIndex={-1}
-            className="mr-2 border border-grey-20"
+            className="border-grey-20 mr-2 w-full border"
             variant="ghost"
             onClick={() => onClear()}
           >
@@ -67,20 +81,13 @@ const FilterDropdownContainer = ({
           <Button
             tabIndex={-1}
             variant="primary"
-            className="w-44 justify-center"
+            className="w-full justify-center"
             size="small"
             onClick={() => onSubmit()}
           >
             Apply
           </Button>
         </div>
-        {React.Children.map(children, (child) => {
-          return (
-            <div className="border-b border-grey-20 py-2 px-4 last:pb-0 last:border-0">
-              {child}
-            </div>
-          )
-        })}
       </RadixPopover.Content>
     </RadixPopover.Root>
   )

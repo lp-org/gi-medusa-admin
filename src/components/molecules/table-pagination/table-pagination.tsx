@@ -47,13 +47,13 @@ export const TablePagination = <T,>({
       <div>
         <p>{`${from} – ${to} of ${count} results`}</p>
       </div>
-      <div className="flex items-center gap-x-small">
+      <div className="gap-x-small flex items-center">
         <p>{`${getState().pagination.pageIndex + 1} of ${getPageCount()}`}</p>
-        <div className="flex items-center gap-x-2xsmall">
+        <div className="gap-x-2xsmall flex items-center">
           <Button
             variant="ghost"
             size="small"
-            className="w-xlarge h-xlarge disabled:text-grey-40"
+            className="h-xlarge w-xlarge disabled:text-grey-40"
             type="button"
             disabled={!getCanPreviousPage()}
             onClick={previousPage}
@@ -63,7 +63,7 @@ export const TablePagination = <T,>({
           <Button
             variant="ghost"
             size="small"
-            className="w-xlarge h-xlarge disabled:text-grey-40"
+            className="h-xlarge w-xlarge disabled:text-grey-40"
             type="button"
             disabled={!getCanNextPage()}
             onClick={nextPage}

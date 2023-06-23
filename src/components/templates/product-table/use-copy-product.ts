@@ -74,6 +74,22 @@ const useCopyProduct = () => {
       {} as Partial<AdminPostProductsReq>
     )
 
+    const optionRankMap: Record<string, number> = {}
+
+    if (options && options.length) {
+      options.forEach((option, i) => {
+        if (!base.options) {
+          base.options = []
+        }
+
+        optionRankMap[option.id] = i
+
+        base.options.push({
+          title: option.title,
+        })
+      })
+    }
+
     if (variants && variants.length) {
       const copiedVariants: AdminPostProductsReq["variants"] = []
 
@@ -87,6 +103,7 @@ const useCopyProduct = () => {
           "product",
           "product_id",
           "variant_rank",
+          "purchasable"
         ])
 
         const variantBase = Object.entries(rest).reduce((acc, [key, value]) => {
@@ -97,6 +114,8 @@ const useCopyProduct = () => {
           return acc
         }, {} as NonNullable<AdminPostProductsReq["variants"]>[0])
 
+        variantBase.prices = []
+
         if (prices && prices.length) {
           variantBase.prices = prices.map((price) => ({
             amount: price.amount,
@@ -106,7 +125,12 @@ const useCopyProduct = () => {
         }
 
         if (options && options.length) {
-          variantBase.options = options.map((option) => ({
+          // Sort the options by rank by looking up the rank in the optionRankMap
+          const sortedOptions = options.sort(
+            (a, b) => optionRankMap[a.option_id] - optionRankMap[b.option_id]
+          )
+
+          variantBase.options = sortedOptions.map((option) => ({
             value: option.value,
           }))
         }
@@ -115,12 +139,6 @@ const useCopyProduct = () => {
       })
 
       base.variants = copiedVariants
-    }
-
-    if (options && options.length) {
-      base.options = options.map((option) => ({
-        title: option.title,
-      }))
     }
 
     if (images && images.length) {

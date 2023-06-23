@@ -129,7 +129,7 @@ const Summary = () => {
       <SummarySection title={"Items"} editIndex={1}>
         <Table>
           <Table.Head>
-            <Table.HeadRow className="inter-small-semibold border-t text-grey-50">
+            <Table.HeadRow className="inter-small-semibold text-grey-50 border-t">
               <Table.HeadCell>Details</Table.HeadCell>
               <Table.HeadCell className="text-right">Quantity</Table.HeadCell>
               <Table.HeadCell className="text-right">
@@ -159,7 +159,7 @@ const Summary = () => {
                             <ImagePlaceholder />
                           )}
                         </div>
-                        <div className="inter-small-regular ml-4 flex flex-col text-grey-50">
+                        <div className="inter-small-regular text-grey-50 ml-4 flex flex-col">
                           <span>
                             <span className="text-grey-90">
                               {item.product_title}
@@ -185,7 +185,7 @@ const Summary = () => {
             <Button
               variant="ghost"
               size="small"
-              className="inter-small-semibold border border-grey-20"
+              className="inter-small-semibold border-grey-20 border"
               onClick={() => setShowAddDiscount(true)}
             >
               <PlusIcon size={20} />
@@ -196,7 +196,7 @@ const Summary = () => {
         {showAddDiscount && !discount?.rule && (
           <>
             <div>
-              <div className="flex w-full items-center gap-x-base">
+              <div className="gap-x-base flex w-full items-center">
                 <Input
                   type="text"
                   placeholder="SUMMER10"
@@ -206,7 +206,7 @@ const Summary = () => {
                 />
                 <Button
                   variant="ghost"
-                  className="h-8 w-8 text-grey-40"
+                  className="text-grey-40 h-8 w-8"
                   size="small"
                   type="button"
                   onClick={() => setShowAddDiscount(false)}
@@ -221,7 +221,7 @@ const Summary = () => {
                 {discError && <span className="text-rose-50">{discError}</span>}
               </div>
               <Button
-                className="h-full border border-grey-20"
+                className="border-grey-20 h-full border"
                 variant="ghost"
                 size="small"
                 loading={isFetching}
@@ -234,24 +234,24 @@ const Summary = () => {
           </>
         )}
         {discount && regionObj && (
-          <div className="inter-small-regular mt-4 flex w-full flex-col border-b border-t border-grey-20 pt-4 last:border-b-0 ">
+          <div className="inter-small-regular border-grey-20 mt-4 flex w-full flex-col border-b border-t pt-4 last:border-b-0 ">
             <div className="inter-base-semibold mb-4 flex w-full justify-between">
               <span>
                 Discount
-                <span className="inter-base-regular ml-0.5 text-grey-50">
+                <span className="inter-base-regular text-grey-50 ml-0.5">
                   (Code: {discount.code})
                 </span>
               </span>
               <span
                 onClick={() => onDiscountRemove()}
-                className="inter-small-semibold cursor-pointer text-violet-60"
+                className="inter-small-semibold text-violet-60 cursor-pointer"
               >
                 <CrossIcon size={20} />
               </span>
             </div>
             <div className="flex w-full">
               <div
-                className={clsx("flex flex-col border-grey-20 pr-6", {
+                className={clsx("border-grey-20 flex flex-col pr-6", {
                   "border-r": discount.rule.type !== "free_shipping",
                 })}
               >
@@ -285,7 +285,7 @@ const Summary = () => {
         <div className="flex items-center">
           <div className="mr-3 h-5 w-5">
             <Avatar
-              color="bg-fuschia-40"
+              color="bg-grey-80"
               user={{
                 email,
                 first_name: shipping?.first_name,
@@ -302,7 +302,7 @@ const Summary = () => {
         <SummarySection title={"Shipping details"} editIndex={2}>
           <div className="grid w-full grid-cols-2 gap-x-6">
             {!isNullishObject(shipping) && shipping && (
-              <div className="flex flex-col border-r border-grey-20 pr-6">
+              <div className="border-grey-20 flex flex-col border-r pr-6">
                 <span className="text-grey-50">Address</span>
                 <span>
                   {shipping.address_1}, {shipping.address_2}
@@ -320,7 +320,7 @@ const Summary = () => {
                   {selectedShippingOption.name} -{" "}
                   {customShippingPrice && regionObj ? (
                     <p>
-                      <span className="mr-2 text-grey-40 line-through">
+                      <span className="text-grey-40 mr-2 line-through">
                         {extractOptionPrice(shippingOptionPrice, regionObj)}
                       </span>
                       {displayAmount(
@@ -358,12 +358,12 @@ const Summary = () => {
 const SummarySection = ({ title, editIndex, children }) => {
   const { setPage } = useContext(SteppedContext)
   return (
-    <div className="inter-small-regular mt-4 flex w-full flex-col border-b border-grey-20 pb-8 last:border-b-0 ">
+    <div className="inter-small-regular border-grey-20 mt-4 flex w-full flex-col border-b pb-8 last:border-b-0 ">
       <div className="inter-base-semibold mb-4 flex w-full justify-between">
         {title}
         <span
           onClick={() => setPage(editIndex)}
-          className="inter-small-semibold cursor-pointer text-violet-60"
+          className="inter-small-semibold text-violet-60 cursor-pointer"
         >
           Edit
         </span>

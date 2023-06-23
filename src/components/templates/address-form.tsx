@@ -1,8 +1,8 @@
-import React from "react"
 import { Controller } from "react-hook-form"
 import { Option } from "../../types/shared"
 import FormValidator from "../../utils/form-validator"
-import { NestedForm } from "../../utils/nested-form"
+import { nestedForm, NestedForm } from "../../utils/nested-form"
+import MetadataForm, { MetadataFormType } from "../forms/general/metadata-form"
 import Input from "../molecules/input"
 import { NextSelect } from "../molecules/select/next-select"
 
@@ -17,6 +17,7 @@ export type AddressPayload = {
   country_code: Option
   postal_code: string
   phone: string | null
+  metadata: MetadataFormType
 }
 
 export enum AddressType {
@@ -51,7 +52,7 @@ const AddressForm = ({
       {(type === AddressType.SHIPPING || type === AddressType.BILLING) && (
         <>
           <span className="inter-base-semibold">General</span>
-          <div className="grid grid-cols-2 mt-4 mb-8 gap-large">
+          <div className="gap-large mt-4 mb-8 grid grid-cols-2">
             <Input
               {...register(path("first_name"), {
                 required: required
@@ -104,7 +105,7 @@ const AddressForm = ({
           }`}
         </span>
       )}
-      <div className="grid grid-cols-2 mt-4 gap-y-large gap-x-large">
+      <div className="gap-y-large gap-x-large mt-4 grid grid-cols-2">
         <Input
           {...form.register(path("address_1"), {
             required: required ? FormValidator.required("Address 1") : false,
@@ -173,6 +174,10 @@ const AddressForm = ({
             )
           }}
         />
+      </div>
+      <div className="mt-xlarge gap-y-base flex flex-col">
+        <span className="inter-base-semibold">Metadata</span>
+        <MetadataForm form={nestedForm(form, "metadata")} />
       </div>
     </div>
   )

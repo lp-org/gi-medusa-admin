@@ -20,6 +20,7 @@ const UserMenu: React.FC = () => {
   const logOut = () => {
     mutate(undefined, {
       onSuccess: () => {
+        console.log("g to login page")
         navigate("/login")
       },
       onError: (err) => {
@@ -35,7 +36,7 @@ const UserMenu: React.FC = () => {
             <Avatar
               user={{ ...user }}
               isLoading={isLoading}
-              color="bg-fuschia-40"
+              color="bg-grey-80"
             />
           </div>
         </DropdownMenu.Trigger>

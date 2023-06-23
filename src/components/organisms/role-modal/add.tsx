@@ -8,7 +8,8 @@ import { useMutation } from "@tanstack/react-query"
 import api from "../../../services/api"
 import useNotification from "../../../hooks/use-notification"
 import { getErrorMessage } from "../../../utils/error-messages"
-import queryClient from "../../../services/queryClient"
+import { queryClient } from "../../../constants/query-client"
+
 type ModalProps = {
   payloadData?: any
   handleClose: () => void

@@ -9,9 +9,10 @@ import Actionables from "../../molecules/actionables"
 import AddRoleModal from "../../organisms/role-modal/add"
 import PermissionModal from "../../organisms/role-modal/permission-modal"
 import ConfirmationPrompt from "../../organisms/confirmation-prompt"
-import queryClient from "../../../services/queryClient"
+
 import useNotification from "../../../hooks/use-notification"
 import { getErrorMessage } from "../../../utils/error-messages"
+import { queryClient } from "../../../constants/query-client"
 interface ColumnType {
   id: string
   name: string

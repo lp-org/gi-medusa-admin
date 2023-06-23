@@ -4,12 +4,12 @@ import clsx from "clsx"
 import { useAdminShippingOptions } from "medusa-react"
 import { useMemo } from "react"
 import { Controller, useWatch } from "react-hook-form"
+import PriceFormInput from "../../../../components/forms/general/prices-form/price-form-input"
 import Button from "../../../../components/fundamentals/button"
 import TrashIcon from "../../../../components/fundamentals/icons/trash-icon"
 import { NextSelect } from "../../../../components/molecules/select/next-select"
 import { NestedForm } from "../../../../utils/nested-form"
 import { formatAmountWithSymbol } from "../../../../utils/prices"
-import PriceFormInput from "../../../products/components/prices-form/price-form-input"
 
 export type ShippingFormType = {
   option: {
@@ -108,7 +108,7 @@ const ShippingForm = ({
   }
 
   return (
-    <div className="flex flex-col gap-y-base">
+    <div className="gap-y-base flex flex-col">
       <div className="flex flex-col">
         <h2 className="inter-base-semibold">
           Shipping for {isReturn ? "return" : "replacement"} items
@@ -140,7 +140,7 @@ const ShippingForm = ({
         <div className="flex w-full items-center justify-end">
           {selectedOptionPrice !== undefined ? (
             <div className="flex w-full items-center justify-end">
-              <div className="grid grid-cols-[1fr_40px] gap-x-xsmall">
+              <div className="gap-x-xsmall grid grid-cols-[1fr_40px]">
                 <Controller
                   control={control}
                   name={path("price")}

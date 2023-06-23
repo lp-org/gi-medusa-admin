@@ -86,7 +86,7 @@ const EditUserModal: React.FC<EditUserModalProps> = ({
             <span className="inter-xlarge-semibold">Edit User</span>
           </Modal.Header>
           <Modal.Content>
-            <div className="mb-base grid w-full grid-cols-2 gap-large">
+            <div className="gap-large mb-base grid w-full grid-cols-2">
               <InputField
                 label="First Name"
                 placeholder="First name..."

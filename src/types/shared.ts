@@ -57,4 +57,5 @@ export type Subset<K> = {
 export type PermissionType = {
   id: string
   name: string
+  label?: string
 }

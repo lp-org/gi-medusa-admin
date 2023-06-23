@@ -4,24 +4,24 @@ import { PublishableApiKey, SalesChannel } from "@medusajs/medusa"
 import {
   useAdminAddPublishableKeySalesChannelsBatch,
   useAdminCreatePublishableApiKey,
-  useAdminPublishableApiKeySalesChannels,
 } from "medusa-react"
 
-import Breadcrumb from "../../../components/molecules/breadcrumb"
-import BodyCard from "../../../components/organisms/body-card"
-import FocusModal from "../../../components/molecules/modal/focus-modal"
+import BackButton from "../../../components/atoms/back-button"
 import Fade from "../../../components/atoms/fade-wrapper"
-import useToggleState from "../../../hooks/use-toggle-state"
+import Spacer from "../../../components/atoms/spacer"
 import Button from "../../../components/fundamentals/button"
+import ChannelsIcon from "../../../components/fundamentals/icons/channels-icon"
 import CrossIcon from "../../../components/fundamentals/icons/cross-icon"
 import InputField from "../../../components/molecules/input"
+import FocusModal from "../../../components/molecules/modal/focus-modal"
+import SalesChannelsSummary from "../../../components/molecules/sales-channels-summary"
+import BodyCard from "../../../components/organisms/body-card"
 import useNotification from "../../../hooks/use-notification"
-import PublishableApiKeysTable from "../tables/publishable-api-keys-table"
+import useToggleState from "../../../hooks/use-toggle-state"
+import AddSalesChannelsSideModal from "../modals/add-sales-channels"
 import DetailsModal from "../modals/details"
 import ManageSalesChannelsSideModal from "../modals/manage-sales-channels"
-import ChannelsIcon from "../../../components/fundamentals/icons/channels-icon"
-import SalesChannelsSummary from "../../../components/molecules/sales-channels-summary"
-import AddSalesChannelsSideModal from "../modals/add-sales-channels"
+import PublishableApiKeysTable from "../tables/publishable-api-keys-table"
 
 type AddSalesChannelsSectionProps = {
   setSelectedChannels: (arg: any) => void
@@ -40,7 +40,7 @@ function AddSalesChannelsSection(props: AddSalesChannelsSectionProps) {
 
   return (
     <div>
-      <div className="flex justify-between items-center">
+      <div className="flex items-center justify-between">
         <div>
           <h5 className="inter-base-semibold text-grey-90 pb-1">
             Sales channels
@@ -63,8 +63,8 @@ function AddSalesChannelsSection(props: AddSalesChannelsSectionProps) {
       {hasSelectedChannels && (
         <div className="mt-10 flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <div className="rounded p-1 border">
-              <div className="bg-gray-100 p-2 rounded">
+            <div className="rounded border p-1">
+              <div className="rounded bg-gray-100 p-2">
                 <ChannelsIcon />
               </div>
             </div>
@@ -151,7 +151,7 @@ function CreatePublishableKey(props: CreatePublishableKeyProps) {
   return (
     <FocusModal>
       <FocusModal.Header>
-        <div className="medium:w-8/12 w-full px-8 flex justify-between">
+        <div className="medium:w-8/12 flex w-full justify-between px-8">
           <Button size="small" variant="ghost" onClick={closeModal}>
             <CrossIcon size={20} />
           </Button>
@@ -169,8 +169,8 @@ function CreatePublishableKey(props: CreatePublishableKeyProps) {
         </div>
       </FocusModal.Header>
 
-      <FocusModal.Main className="w-full no-scrollbar flex justify-center">
-        <div className="medium:w-7/12 large:w-6/12 small:w-4/5 max-w-[700px] my-16">
+      <FocusModal.Main className="no-scrollbar flex w-full justify-center">
+        <div className="medium:w-7/12 large:w-6/12 small:w-4/5 my-16 max-w-[700px]">
           <h1 className="inter-xlarge-semibold text-grey-90 pb-8">
             Create API Key
           </h1>
@@ -191,7 +191,7 @@ function CreatePublishableKey(props: CreatePublishableKeyProps) {
             onChange={(ev) => setName(ev.target.value)}
           />
 
-          <div className="w-[100%] h-[1px] bg-gray-200 mt-16 mb-8" />
+          <div className="mt-16 mb-8 h-[1px] w-[100%] bg-gray-200" />
 
           <AddSalesChannelsSection
             selectedChannels={selectedChannels}
@@ -230,10 +230,10 @@ function Index() {
 
   return (
     <div>
-      <Breadcrumb
-        currentPage="Publishable API Keys"
-        previousBreadcrumb="Settings"
-        previousRoute="/a/settings"
+      <BackButton
+        label="Back to settings"
+        path="/a/settings"
+        className="mb-xsmall"
       />
       <BodyCard
         title="Publishable API keys"
@@ -257,6 +257,7 @@ function Index() {
           close={_closeChannelsModal}
         />
       </BodyCard>
+      <Spacer />
     </div>
   )
 }

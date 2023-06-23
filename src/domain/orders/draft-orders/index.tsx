@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react"
 import { Route, Routes, useNavigate } from "react-router-dom"
+import Spacer from "../../../components/atoms/spacer"
 
 import PlusIcon from "../../../components/fundamentals/icons/plus-icon"
 import BodyCard from "../../../components/organisms/body-card"
@@ -28,8 +29,8 @@ const DraftOrderIndex = () => {
   }, [view])
 
   return (
-    <div className="flex flex-col grow h-full">
-      <div className="w-full flex flex-col grow">
+    <div className="flex h-full grow flex-col">
+      <div className="flex w-full grow flex-col">
         <BodyCard
           customHeader={
             <TableViewHeader
@@ -47,6 +48,7 @@ const DraftOrderIndex = () => {
         >
           <DraftOrderTable />
         </BodyCard>
+        <Spacer />
       </div>
       {showNewOrder && (
         <NewOrderFormProvider>

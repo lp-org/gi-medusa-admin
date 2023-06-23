@@ -4,7 +4,7 @@ import { PermissionType } from "../types/shared"
 
 interface BearState {
   permissions: string[]
-  setPermissions: (e: PermissionType[]) => void
+  setPermissions: (e: PermissionType[] | undefined) => void
 }
 
 export const useAppStore = create<BearState>()(
@@ -12,7 +12,7 @@ export const useAppStore = create<BearState>()(
     (set) => ({
       permissions: [],
       setPermissions: (payload) =>
-        set({ permissions: payload.map((el) => el.name) }),
+        set({ permissions: payload ? payload.map((el) => el.name) :[] }),
     }),
     {
       name: "app-storage",

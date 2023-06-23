@@ -1,12 +1,13 @@
-import * as React from "react"
 import { useWatch } from "react-hook-form"
 import { useNavigate } from "react-router-dom"
+import MetadataForm from "../../../../components/forms/general/metadata-form"
 import Button from "../../../../components/fundamentals/button"
 import CrossIcon from "../../../../components/fundamentals/icons/cross-icon"
 import FocusModal from "../../../../components/molecules/modal/focus-modal"
 import Accordion from "../../../../components/organisms/accordion"
 import useNotification from "../../../../hooks/use-notification"
 import { getErrorMessage } from "../../../../utils/error-messages"
+import { nestedForm } from "../../../../utils/nested-form"
 import { DiscountRuleType } from "../../types"
 import { useDiscountForm } from "./form/discount-form-context"
 import { DiscountFormValues } from "./form/mappers"
@@ -21,11 +22,10 @@ type DiscountFormProps = {
   closeForm?: () => void
 }
 
-
 const DiscountForm = ({ closeForm }: DiscountFormProps) => {
   const navigate = useNavigate()
   const notification = useNotification()
-  const { handleSubmit, handleReset, control } = useDiscountForm()
+  const { handleSubmit, handleReset, control, form } = useDiscountForm()
 
   const { onSaveAsActive, onSaveAsInactive } = useFormActions()
 
@@ -67,12 +67,12 @@ const DiscountForm = ({ closeForm }: DiscountFormProps) => {
   return (
     <FocusModal>
       <FocusModal.Header>
-        <div className="medium:w-8/12 w-full px-8 flex justify-between">
+        <div className="medium:w-8/12 flex w-full justify-between px-8">
           <Button
             size="small"
             variant="ghost"
             onClick={closeForm}
-            className="border rounded-rounded w-8 h-8"
+            className="rounded-rounded h-8 w-8 border"
           >
             <CrossIcon size={20} />
           </Button>
@@ -81,7 +81,7 @@ const DiscountForm = ({ closeForm }: DiscountFormProps) => {
               onClick={handleSubmit(submitGhost)}
               size="small"
               variant="ghost"
-              className="border rounded-rounded"
+              className="rounded-rounded border"
             >
               Save as draft
             </Button>
@@ -97,11 +97,11 @@ const DiscountForm = ({ closeForm }: DiscountFormProps) => {
         </div>
       </FocusModal.Header>
       <FocusModal.Main>
-        <div className="flex justify-center mb-[25%]">
-          <div className="max-w-[700px] w-full pt-16">
+        <div className="mb-[25%] flex justify-center">
+          <div className="w-full max-w-[700px] pt-16">
             <h1 className="inter-xlarge-semibold">Create new discount</h1>
             <Accordion
-              className="pt-7 text-grey-90"
+              className="text-grey-90 pt-7"
               defaultValue={["promotion-type"]}
               type="multiple"
             >
@@ -146,6 +146,16 @@ const DiscountForm = ({ closeForm }: DiscountFormProps) => {
                 tooltip="Add conditions to your Discount"
               >
                 <DiscountNewConditions />
+              </Accordion.Item>
+              <Accordion.Item
+                title="Metadata"
+                subtitle="Metadata allows you to add additional information to your discount."
+                value="metadata"
+                forceMountContent
+              >
+                <div className="mt-small">
+                  <MetadataForm form={nestedForm(form, "metadata")} />
+                </div>
               </Accordion.Item>
             </Accordion>
           </div>

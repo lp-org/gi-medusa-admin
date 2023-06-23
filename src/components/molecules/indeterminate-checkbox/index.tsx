@@ -2,6 +2,7 @@ import clsx from "clsx"
 import React, { useImperativeHandle } from "react"
 
 import CheckIcon from "../../fundamentals/icons/check-icon"
+import MinusIcon from "../../fundamentals/icons/minus-icon"
 
 type IndeterminateCheckboxProps = {
   type?: "checkbox" | "radio"
@@ -56,7 +57,7 @@ const IndeterminateCheckbox = React.forwardRef<
     <div className="flex h-full items-center">
       <div
         onClick={handleClick}
-        className={`flex h-5 w-5 cursor-pointer justify-center rounded-base border border-grey-30 text-grey-0 ${
+        className={`rounded-base border-grey-30 text-grey-0 flex h-5 w-5 cursor-pointer justify-center border ${
           rest.disabled
             ? checked
               ? "bg-gray-300"
@@ -66,6 +67,7 @@ const IndeterminateCheckbox = React.forwardRef<
       >
         <span className="self-center">
           {checked && <CheckIcon size={16} />}
+          {indeterminate && <MinusIcon size={16} />}
         </span>
       </div>
       <input

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react"
-import Breadcrumb from "../../../components/molecules/breadcrumb"
+
 import invites from "@medusajs/medusa/dist/api/routes/admin/invites"
 import actionables from "../../../components/molecules/actionables"
 import BodyCard from "../../../components/organisms/body-card"
@@ -9,7 +9,8 @@ import PlusIcon from "../../../components/fundamentals/icons/plus-icon"
 
 import RoleTable from "../../../components/templates/role-table"
 import AddRoleModal from "../../../components/organisms/role-modal/add"
-import queryClient from "../../../services/queryClient"
+import BackButton from "../../../components/atoms/back-button"
+
 const Roles = () => {
   const actionables = [
     {
@@ -27,11 +28,16 @@ const Roles = () => {
   const [modalOpen, setModalOpen] = useState(false)
   return (
     <div>
-      <Breadcrumb
+      {/* <Breadcrumb
         previousRoute="/a/settings"
         previousBreadcrumb="Settings"
         currentPage="Roles"
-      />
+      /> */}
+       <BackButton
+          path="/a/settings"
+          label="Back to settings"
+          className="mb-xsmall"
+        />
       <BodyCard title="Roles" subtitle="Manage roles" actionables={actionables}>
         <div className="flex grow  flex-col pt-2">
           <RoleTable />

@@ -6,6 +6,8 @@ import CoinsIcon from "../../components/fundamentals/icons/coins-icon"
 import CrosshairIcon from "../../components/fundamentals/icons/crosshair-icon"
 import DollarSignIcon from "../../components/fundamentals/icons/dollar-sign-icon"
 import HappyIcon from "../../components/fundamentals/icons/happy-icon"
+import KeyIcon from "../../components/fundamentals/icons/key-icon"
+import MailIcon from "../../components/fundamentals/icons/mail-icon"
 import MapPinIcon from "../../components/fundamentals/icons/map-pin-icon"
 import TaxesIcon from "../../components/fundamentals/icons/taxes-icon"
 import TruckIcon from "../../components/fundamentals/icons/truck-icon"
@@ -18,7 +20,7 @@ import Regions from "./regions"
 import ReturnReasons from "./return-reasons"
 import Taxes from "./taxes"
 import Users from "./users"
-import KeyIcon from "../../components/fundamentals/icons/key-icon"
+
 import Roles from "./roles"
 import { useIsPermission } from "../../hooks/use-is-permission"
 
@@ -92,12 +94,7 @@ const SettingsIndex = () => {
           to={`/a/settings/personal-information`}
         />
       )}
-      {/* <SettingsCard
-        heading={"hello@medusajs.com"}
-        description={"Can’t find the answers you’re looking for?"}
-        icon={<MailIcon />}
-        externalLink={"mailto: hello@medusajs.com"}
-      /> */}
+   
       {isPermission("setting.tax") && (
         <SettingsCard
           heading={"Tax Settings"}

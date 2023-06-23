@@ -10,8 +10,10 @@ import api from "../../../services/api"
 import Checkbox from "../../atoms/checkbox"
 
 import { CollapsibleTree } from "../../molecules/collapsible-tree"
-import queryClient from "../../../services/queryClient"
+
 import { PermissionType } from "../../../types/shared"
+import { queryClient } from "../../../constants/query-client"
+import { startCase } from "lodash"
 
 function groupPermissions(permissions: PermissionType[]) {
   const groupedPermissions: Record<string, PermissionType[]> = {}
@@ -93,7 +95,13 @@ const PermissionModal: React.FC<ModalProps> = ({ roleId, handleClose }) => {
                   <CollapsibleTree>
                     <CollapsibleTree.Parent>
                       <Checkbox
-                        label={key}
+                        indeterminate={value.some(
+                          (el) =>
+                            getValues("permission").findIndex(
+                              (perm) => perm.id === el.id
+                            ) >= 0
+                        )}
+                        label={startCase(key)}
                         checked={value.every(
                           (el) =>
                             getValues("permission").findIndex(
@@ -116,14 +124,14 @@ const PermissionModal: React.FC<ModalProps> = ({ roleId, handleClose }) => {
                       />
                     </CollapsibleTree.Parent>
                     <CollapsibleTree.Content>
-                      {value.map(({ id, name }) => (
+                      {value.map(({ id, name, label }) => (
                         <CollapsibleTree.Leaf>
                           <Controller
                             name={`permission`}
                             control={control}
                             render={({ field }) => (
                               <Checkbox
-                                label={name}
+                                label={label}
                                 checked={
                                   field.value.findIndex((el) => el.id === id) >=
                                   0

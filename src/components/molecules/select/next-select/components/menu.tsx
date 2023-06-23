@@ -1,5 +1,3 @@
-import clsx from "clsx"
-import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import {
   ActionMeta,
   CX,
@@ -12,11 +10,14 @@ import {
   OptionsOrGroups,
   PropsValue,
 } from "react-select"
+import { hasPrefix, hasSuffix, optionIsDisabled } from "../utils"
+import { useCallback, useEffect, useMemo, useRef, useState } from "react"
+
 import Button from "../../../../fundamentals/button"
 import CheckIcon from "../../../../fundamentals/icons/check-icon"
 import ListArrowIcon from "../../../../fundamentals/icons/list-arrow-icon"
-import { hasPrefix, hasSuffix, optionIsDisabled } from "../utils"
 import SelectPrimitives from "./select-primitives"
+import clsx from "clsx"
 
 const Menu = <
   Option,
@@ -53,7 +54,7 @@ const Menu = <
       className={cx(
         { menu: true },
         clsx(
-          "absolute w-full overflow-hidden border-border z-[60] bg-grey-0 rounded-rounded border border-grey-20 shadow-dropdown mb-base",
+          "border-border bg-grey-0 rounded-rounded border-grey-20 shadow-dropdown mb-base absolute z-[60] w-full overflow-hidden border",
           {
             "top-[calc(100%+8px)]": placement === "bottom",
             "bottom-full": placement === "top",
@@ -178,7 +179,7 @@ export const MenuList = <
           "menu-list": true,
           "menu-list--is-multi": isMulti,
         },
-        clsx("overflow-y-auto flex flex-col py-xsmall no-scrollbar", className)
+        clsx("py-xsmall no-scrollbar flex flex-col overflow-y-auto", className)
       )}
     >
       {isMulti && selectAll && (
@@ -208,14 +209,14 @@ export const LoadingMessage = <
     return (
       <div
         className={clsx(
-          "w-full flex items-center px-base transition-colors hover:bg-grey-5",
+          "px-base hover:bg-grey-5 flex w-full items-center transition-colors",
           {
             "h-xlarge": size === "sm",
             "h-10": size === "md" || !size,
           }
         )}
       >
-        <div className="bg-grey-10 animate-pulse w-1/4 h-xsmall rounded-rounded" />
+        <div className="bg-grey-10 h-xsmall rounded-rounded w-1/4 animate-pulse" />
       </div>
     )
   }
@@ -271,15 +272,15 @@ export const Option = <
           "option--is-focused": isFocused,
         },
         clsx(
-          "flex items-center justify-between py-xsmall px-base transition-colors hover:bg-grey-5",
+          "py-xsmall px-base hover:bg-grey-5 flex items-center justify-between transition-colors",
           {
-            "text-grey-30 select-none cursor-not-allowed": isDisabled,
+            "text-grey-30 cursor-not-allowed select-none": isDisabled,
             "bg-grey-10": isFocused && !isDisabled,
             hidden: hideSelectedOptions && isSelected,
           },
           {
             "h-xlarge": size === "sm",
-            "h-10": size === "md" || !size,
+            "min-h-10": size === "md" || !size,
           },
           className
         )
@@ -290,13 +291,13 @@ export const Option = <
       tabIndex={isDisabled ? -1 : 0}
       {...innerProps}
     >
-      <div className="flex items-center gap-x-small flex-1">
+      <div className="gap-x-small flex flex-1 items-center">
         {isMulti && (
           <CheckboxAdornment isSelected={isSelected} isDisabled={isDisabled} />
         )}
         <div
           className={clsx(
-            "flex items-center justify-between gap-x-xsmall inter-base-regular flex-1",
+            "gap-x-xsmall inter-base-regular flex flex-1 items-center justify-between",
             {
               truncate: !!truncateOption,
             }
@@ -306,14 +307,14 @@ export const Option = <
           <span className="w-full">{children}</span>
 
           {suffix && (
-            <span className="inter-base-regular justify-self-end text-grey-50">
+            <span className="inter-base-regular text-grey-50 justify-self-end">
               {suffix}
             </span>
           )}
         </div>
       </div>
       {!isMulti && (
-        <div className="w-5 ml-xsmall">
+        <div className="ml-xsmall w-5">
           {isSelected && <CheckIcon size={16} />}
         </div>
       )}
@@ -328,7 +329,7 @@ const CheckboxAdornment = ({
   return (
     <div
       className={clsx(
-        `w-base h-base flex justify-center text-grey-0 border-grey-30 border rounded-base transition-colors`,
+        `w-base h-base text-grey-0 border-grey-30 rounded-base flex justify-center border transition-colors`,
         {
           "bg-violet-60 border-violet-60": isSelected,
           "bg-grey-5": isDisabled,

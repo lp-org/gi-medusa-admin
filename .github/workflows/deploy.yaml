@@ -20,7 +20,7 @@ jobs:
         run: npm ci
 
       - name: Build project
-        run: export MEDUSA_BACKEND_URL=https://api.appsitetest.xyz && npm run build
+        run: export MEDUSA_BACKEND_URL=https://api.grin-global.com && npm run build
 
       - name: Sync files via rsync
         uses: burnett01/rsync-deployments@6.0.0

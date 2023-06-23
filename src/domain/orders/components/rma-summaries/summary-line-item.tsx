@@ -28,12 +28,12 @@ export const SummaryLineItem = ({
 }: SummaryLineProps) => {
   return (
     <div className="flex items-center justify-between">
-      <div className="flex items-center gap-x-base">
+      <div className="gap-x-base flex items-center">
         <div>
           <Thumbnail src={thumbnail} />
         </div>
         <div className="inter-small-regular">
-          <div className="flex items-center gap-x-2xsmall">
+          <div className="gap-x-2xsmall flex items-center">
             <p>{productTitle}</p>
             {variantTitle && <p className="text-grey-50">({variantTitle})</p>}
           </div>
@@ -44,7 +44,7 @@ export const SummaryLineItem = ({
           )}
         </div>
       </div>
-      <div className="inter-small-regular flex items-center gap-x-base">
+      <div className="inter-small-regular gap-x-base flex items-center">
         <p className="text-grey-40">
           {formatAmountWithSymbol({
             amount: price,

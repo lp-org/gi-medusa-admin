@@ -1,10 +1,9 @@
 import { useAdminCreatePriceList, useAdminUpdatePriceList } from "medusa-react"
-import React, { useContext } from "react"
 import { useNavigate } from "react-router-dom"
 import Button from "../../../../components/fundamentals/button"
 import CrossIcon from "../../../../components/fundamentals/icons/cross-icon"
-import { FeatureFlagContext } from "../../../../context/feature-flag"
 import useNotification from "../../../../hooks/use-notification"
+import { useFeatureFlag } from "../../../../providers/feature-flag-provider"
 import { getErrorMessage } from "../../../../utils/error-messages"
 import {
   mapFormValuesToCreatePriceList,
@@ -37,7 +36,7 @@ const FormHeader = (props: PriceListFormProps & { onClose?: () => void }) => {
   const createPriceList = useAdminCreatePriceList()
   const updatePriceList = useAdminUpdatePriceList(props.id!)
 
-  const { isFeatureEnabled } = useContext(FeatureFlagContext)
+  const { isFeatureEnabled } = useFeatureFlag()
 
   const onPublish = (values: CreatePriceListFormValues) => {
     const data = mapFormValuesToCreatePriceList(values, PriceListStatus.ACTIVE)
@@ -133,12 +132,12 @@ const FormHeader = (props: PriceListFormProps & { onClose?: () => void }) => {
   }
 
   return (
-    <div className="medium:w-8/12 w-full px-8 flex justify-between">
+    <div className="medium:w-8/12 flex w-full justify-between px-8">
       <Button
         size="small"
         variant="ghost"
         onClick={closeForm}
-        className="border rounded-rounded w-8 h-8"
+        className="rounded-rounded h-8 w-8 border"
       >
         <CrossIcon size={20} />
       </Button>
@@ -147,7 +146,7 @@ const FormHeader = (props: PriceListFormProps & { onClose?: () => void }) => {
           onClick={secondaryAction.onClick}
           size="small"
           variant="ghost"
-          className="border rounded-rounded"
+          className="rounded-rounded border"
         >
           {secondaryAction.label}
         </Button>

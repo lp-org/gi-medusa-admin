@@ -1,24 +1,37 @@
-import * as PopoverPrimitive from "@radix-ui/react-popover"
-import clsx from "clsx"
-import moment from "moment"
-import React, { useEffect, useState } from "react"
-import ReactDatePicker from "react-datepicker"
 import "react-datepicker/dist/react-datepicker.css"
-import Button from "../../fundamentals/button"
+
+import * as PopoverPrimitive from "@radix-ui/react-popover"
+
+import React, { useEffect, useState } from "react"
+
 import ArrowDownIcon from "../../fundamentals/icons/arrow-down-icon"
-import InputContainer from "../../fundamentals/input-container"
-import InputHeader from "../../fundamentals/input-header"
+import Button from "../../fundamentals/button"
 import CustomHeader from "./custom-header"
 import { DateTimePickerProps } from "./types"
+import InputContainer from "../../fundamentals/input-container"
+import InputHeader from "../../fundamentals/input-header"
+import ReactDatePicker from "react-datepicker"
+import clsx from "clsx"
+import moment from "moment"
 
-const getDateClassname = (d, tempDate) => {
-  return moment(d).format("YY,MM,DD") === moment(tempDate).format("YY,MM,DD")
-    ? "date chosen"
-    : `date ${
-        moment(d).format("YY,MM,DD") < moment(new Date()).format("YY,MM,DD")
-          ? "past"
-          : ""
-      }`
+const getDateClassname = (
+  d: Date,
+  tempDate: Date | null,
+  greyPastDates: boolean = true
+): string => {
+  const classes: string[] = ["date"]
+  if (
+    tempDate &&
+    moment(d).format("YY,MM,DD") === moment(tempDate).format("YY,MM,DD")
+  ) {
+    classes.push("chosen")
+  } else if (
+    greyPastDates &&
+    moment(d).format("YY,MM,DD") < moment(new Date()).format("YY,MM,DD")
+  ) {
+    classes.push("past")
+  }
+  return classes.join(" ")
 }
 
 const DatePicker: React.FC<DateTimePickerProps> = ({
@@ -29,12 +42,18 @@ const DatePicker: React.FC<DateTimePickerProps> = ({
   tooltipContent,
   tooltip,
 }) => {
-  const [tempDate, setTempDate] = useState(date)
+  const [tempDate, setTempDate] = useState<Date | null>(date || null)
   const [isOpen, setIsOpen] = useState(false)
 
   useEffect(() => setTempDate(date), [isOpen])
 
   const submitDate = () => {
+    if (!tempDate || !date) {
+      onSubmitDate(null)
+      setIsOpen(false)
+      return
+    }
+
     // update only date, month and year
     const newDate = new Date(date.getTime())
     newDate.setUTCDate(tempDate.getUTCDate())
@@ -50,25 +69,30 @@ const DatePicker: React.FC<DateTimePickerProps> = ({
       <PopoverPrimitive.Root open={isOpen} onOpenChange={setIsOpen}>
         <PopoverPrimitive.Trigger asChild>
           <button
-            className={clsx("w-full rounded-rounded border ", {
+            className={clsx("rounded-rounded w-full border ", {
               "shadow-input border-violet-60": isOpen,
               "border-grey-20": !isOpen,
             })}
+            type="button"
           >
-            <InputContainer className="border-0 shadown-none focus-within:shadow-none">
-              <div className="w-full flex text-grey-50 pr-0.5 justify-between">
-                <InputHeader
-                  {...{
-                    label,
-                    required,
-                    tooltipContent,
-                    tooltip,
-                  }}
-                />
+            <InputContainer className="shadown-none border-0 focus-within:shadow-none">
+              <div className="text-grey-50 flex w-full justify-between pr-0.5">
+                {label && (
+                  <InputHeader
+                    {...{
+                      label,
+                      required,
+                      tooltipContent,
+                      tooltip,
+                    }}
+                  />
+                )}
                 <ArrowDownIcon size={16} />
               </div>
               <label className="w-full text-left">
-                {moment(date).format("ddd, DD MMM YYYY")}
+                {date
+                  ? moment(date).format("ddd, DD MMM YYYY")
+                  : "---, -- -- ----"}
               </label>
             </InputContainer>
           </button>
@@ -76,15 +100,18 @@ const DatePicker: React.FC<DateTimePickerProps> = ({
         <PopoverPrimitive.Content
           side="top"
           sideOffset={8}
-          className="rounded-rounded px-8  border border-grey-20 bg-grey-0 w-full shadow-dropdown"
+          className="rounded-rounded border-grey-20  bg-grey-0 shadow-dropdown w-full border px-8"
         >
-          <CalendarComponent date={tempDate} onChange={setTempDate} />
-          <div className="flex w-full mb-8 mt-5">
+          <CalendarComponent
+            date={tempDate}
+            onChange={(date) => setTempDate(date)}
+          />
+          <div className="mb-8 mt-5 flex w-full">
             <Button
               variant="ghost"
               size="medium"
               onClick={() => setIsOpen(false)}
-              className="mr-2 w-1/3 flex justify-center border border-grey-20"
+              className="border-grey-20 mr-2 flex w-1/3 justify-center border"
             >
               Cancel
             </Button>
@@ -92,7 +119,7 @@ const DatePicker: React.FC<DateTimePickerProps> = ({
               size="medium"
               variant="primary"
               onClick={() => submitDate()}
-              className="w-2/3 flex justify-center"
+              className="flex w-2/3 justify-center"
             >{`Set ${label}`}</Button>
           </div>
         </PopoverPrimitive.Content>
@@ -101,13 +128,26 @@ const DatePicker: React.FC<DateTimePickerProps> = ({
   )
 }
 
-export const CalendarComponent = ({ date, onChange }) => (
+type CalendarComponentProps = {
+  date: Date | null
+  onChange: (
+    date: Date | null,
+    event: React.SyntheticEvent<any, Event> | undefined
+  ) => void
+  greyPastDates?: boolean
+}
+
+export const CalendarComponent = ({
+  date,
+  onChange,
+  greyPastDates = true,
+}: CalendarComponentProps) => (
   <ReactDatePicker
     selected={date}
     inline
     onChange={onChange}
     calendarClassName="date-picker"
-    dayClassName={(d) => getDateClassname(d, date)}
+    dayClassName={(d) => getDateClassname(d, date, greyPastDates)}
     renderCustomHeader={({ ...props }) => <CustomHeader {...props} />}
   />
 )
