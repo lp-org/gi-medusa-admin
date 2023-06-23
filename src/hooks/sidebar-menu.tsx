@@ -57,10 +57,7 @@ export const sidebarMenu = () => {
         pageLink: "/a/gift-cards",
         icon: <GiftIcon size={ICON_SIZE} />,
         text: "Gift Cards",
-        enabled: isPermissionEnabled([
-          "gift-cards.add.view",
-          "gift-cards.add.add",
-        ]),
+        enabled: isPermissionEnabled(["gift-cards.view", "gift-cards.add"]),
       },
       {
         pageLink: "/a/pricing",

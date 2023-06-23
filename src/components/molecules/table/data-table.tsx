@@ -291,9 +291,7 @@ const DataTable = <TData,>({
       )}
       <br />
 
-      <hr />
-      <br />
-      <div>
+      {/* <div>
         <button className="mb-2 rounded border p-2" onClick={() => rerender()}>
           Force Rerender
         </button>
@@ -321,7 +319,7 @@ const DataTable = <TData,>({
         >
           Log table.getSelectedFlatRows()
         </button>
-      </div>
+      </div> */}
     </Fragment>
   )
 }
