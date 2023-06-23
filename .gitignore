@@ -28,4 +28,6 @@ dist-ssr
 public
 preview
 
+.env
+
 
