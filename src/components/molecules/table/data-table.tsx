@@ -28,6 +28,8 @@ import ArrowRightIcon from "../../fundamentals/icons/arrow-right-icon"
 import ChevronUpIcon from "../../fundamentals/icons/chevron-up"
 import ChevronDownIcon from "../../fundamentals/icons/chevron-down"
 import Table from "."
+import { TablePagination } from "../table-pagination/table-pagination"
+
 export function hasClass(className?: string, targetClass?: string) {
   if (!className || !targetClass) {
     return false // Return false if either className or targetClass is missing
@@ -102,7 +104,7 @@ const DataTable = <TData,>({
   const table = useReactTable({
     data: data?.data ?? [],
     columns: localColumns,
-    pageCount: data && Math.ceil(data?.count / pagination?.pageSize),
+    pageCount: data && Math.ceil(data?.count / 10),
     state: {
       sorting,
       rowSelection,
@@ -259,8 +261,12 @@ const DataTable = <TData,>({
       </div>
       <div className="h-2" />
       {/* Pagination */}
-
-      {pagination && (
+      {
+        <div className="mt-14">
+          <TablePagination table={table} count={data?.count} />
+        </div>
+      }
+      {/* {pagination && (
         <div className="flex items-center gap-x-small">
           <p>{`${
             table.getState().pagination.pageIndex + 1
@@ -288,7 +294,7 @@ const DataTable = <TData,>({
             </Button>
           </div>
         </div>
-      )}
+      )} */}
       <br />
 
       {/* <div>

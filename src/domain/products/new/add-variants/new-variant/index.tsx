@@ -7,7 +7,7 @@ import Tooltip from "../../../../../components/atoms/tooltip"
 import { CustomsFormType } from "../../../../../components/forms/product/customs-form"
 import { DimensionsFormType } from "../../../../../components/forms/product/dimensions-form"
 import CreateFlowVariantForm, {
-  CreateFlowVariantFormType
+  CreateFlowVariantFormType,
 } from "../../../../../components/forms/product/variant-form/create-flow-variant-form"
 import { VariantOptionValueType } from "../../../../../components/forms/product/variant-form/variant-select-options-form"
 import Button from "../../../../../components/fundamentals/button"
@@ -20,7 +20,7 @@ import Actionables from "../../../../../components/molecules/actionables"
 import IconTooltip from "../../../../../components/molecules/icon-tooltip"
 import Modal from "../../../../../components/molecules/modal"
 import LayeredModal, {
-  LayeredModalContext
+  LayeredModalContext,
 } from "../../../../../components/molecules/modal/layered-modal"
 import useImperativeDialog from "../../../../../hooks/use-imperative-dialog"
 import useToggleState from "../../../../../hooks/use-toggle-state"
@@ -167,7 +167,7 @@ const NewVariant = ({
         ref={preview}
         data-handler-id={handlerId}
         className={clsx(
-          "rounded-rounded py-xsmall pl-xsmall pr-base focus-within:bg-grey-5 hover:bg-grey-5 grid h-16 translate-y-0 translate-x-0 grid-cols-[32px_1fr_90px_100px_48px] transition-all",
+          "grid h-16 translate-y-0 translate-x-0 grid-cols-[32px_1fr_90px_100px_48px] rounded-rounded py-xsmall pl-xsmall pr-base transition-all focus-within:bg-grey-5 hover:bg-grey-5",
           {
             "opacity-50": isDragging,
           }
@@ -175,7 +175,7 @@ const NewVariant = ({
       >
         <div
           ref={ref}
-          className="text-grey-40 flex cursor-move items-center justify-center"
+          className="flex cursor-move items-center justify-center text-grey-40"
         >
           <GripIcon size={20} />
         </div>
@@ -204,7 +204,7 @@ const NewVariant = ({
             productDimensions={productDimensions}
           />
         </div>
-        <div className="ml-xlarge pr-base flex items-center justify-center">
+        <div className="ml-xlarge flex items-center justify-center pr-base">
           <Actionables
             forceDropdown
             actions={[
@@ -223,7 +223,7 @@ const NewVariant = ({
             customTrigger={
               <Button
                 variant="ghost"
-                className="h-xlarge w-xlarge text-grey-50 flex items-center justify-center p-0"
+                className="flex h-xlarge w-xlarge items-center justify-center p-0 text-grey-50"
               >
                 <MoreHorizontalIcon size={20} />
               </Button>
@@ -255,7 +255,7 @@ const NewVariant = ({
             />
           </Modal.Content>
           <Modal.Footer>
-            <div className="gap-x-xsmall flex w-full items-center justify-end">
+            <div className="flex w-full items-center justify-end gap-x-xsmall">
               <Button
                 variant="secondary"
                 size="small"
@@ -299,7 +299,7 @@ const VariantValidity = ({
       <IconTooltip
         type="error"
         content={
-          <div className="gap-y-2xsmall flex flex-col text-rose-50">
+          <div className="flex flex-col gap-y-2xsmall text-rose-50">
             <p>This variant has no options.</p>
           </div>
         }
@@ -314,7 +314,7 @@ const VariantValidity = ({
       <IconTooltip
         type="error"
         content={
-          <div className="gap-y-2xsmall flex flex-col text-rose-50">
+          <div className="flex flex-col gap-y-2xsmall text-rose-50">
             <p>You are missing options values for the following options:</p>
             <ul className="list-inside list-disc">
               {invalidOptions.map((io, index) => {
@@ -350,7 +350,7 @@ const VariantValidity = ({
         type="warning"
         side="right"
         content={
-          <div className="gap-y-2xsmall flex flex-col text-orange-50">
+          <div className="flex flex-col gap-y-2xsmall text-orange-50">
             <p>
               Your variant is createable, but it's missing some important
               fields:

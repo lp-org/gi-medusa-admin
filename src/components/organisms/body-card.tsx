@@ -42,7 +42,7 @@ const BodyCard: React.FC<BodyCardProps> = ({
   return (
     <div
       className={clsx(
-        "rounded-rounded bg-grey-0 border-grey-20 flex h-full w-full flex-col overflow-hidden border",
+        "flex h-full w-full flex-col overflow-hidden rounded-rounded border border-grey-20 bg-grey-0",
         { "min-h-[350px]": !compact },
         className
       )}
@@ -50,18 +50,18 @@ const BodyCard: React.FC<BodyCardProps> = ({
     >
       <div className="relative">
         {isScrolled && (
-          <div className="rounded-t-rounded from-grey-0 h-xlarge absolute top-0 left-0 right-0 z-10 bg-gradient-to-b to-[rgba(255,255,255,0)]" />
+          <div className="absolute top-0 left-0 right-0 z-10 h-xlarge rounded-t-rounded bg-gradient-to-b from-grey-0 to-[rgba(255,255,255,0)]" />
         )}
       </div>
       <div
         className={clsx("flex grow flex-col", {
-          "border-grey-20 border-b border-solid": setBorders,
+          "border-b border-solid border-grey-20": setBorders,
         })}
         onScroll={scrollListener}
       >
         <div
           className={clsx("px-xlarge py-large", {
-            "border-grey-20 border-b border-solid": setBorders,
+            "border-b border-solid border-grey-20": setBorders,
           })}
         >
           <div className="flex items-start justify-between">
@@ -75,7 +75,7 @@ const BodyCard: React.FC<BodyCardProps> = ({
               )}
 
               {subtitle && (
-                <h3 className="inter-small-regular text-grey-50 pt-1.5">
+                <h3 className="inter-small-regular pt-1.5 text-grey-50">
                   {subtitle}
                 </h3>
               )}
@@ -105,14 +105,14 @@ const BodyCard: React.FC<BodyCardProps> = ({
         </div>
       </div>
       {events && events.length > 0 ? (
-        <div className="pb-large pt-base px-xlarge border-grey-20 border-t">
+        <div className="border-t border-grey-20 px-xlarge pb-large pt-base">
           <div className="flex flex-row-reverse items-center">
             {events.map((event, i: React.Key) => {
               return (
                 <Button
                   key={i}
                   onClick={event.onClick}
-                  className="first:ml-xsmall justify-center"
+                  className="justify-center first:ml-xsmall"
                   variant={i === 0 ? "primary" : "secondary"}
                   size={"small"}
                   type={event.type}

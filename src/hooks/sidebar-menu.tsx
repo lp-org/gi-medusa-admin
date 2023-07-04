@@ -9,6 +9,7 @@ import SaleIcon from "../components/fundamentals/icons/sale-icon"
 import CashIcon from "../components/fundamentals/icons/cash-icon"
 import GearIcon from "../components/fundamentals/icons/gear-icon"
 import GiftIcon from "../components/fundamentals/icons/gift-icon"
+import FileIcon from "../components/fundamentals/icons/file-icon"
 const ICON_SIZE = 20
 export const sidebarMenu = () => {
   const isPermissionEnabled = useIsPermission()
@@ -64,6 +65,12 @@ export const sidebarMenu = () => {
         icon: <CashIcon size={ICON_SIZE} />,
         text: "Pricings",
         enabled: isPermissionEnabled(["pricings.view", "pricings.add"]),
+      },
+      {
+        pageLink: "/a/pages",
+        icon: <FileIcon size={ICON_SIZE} fill="currentColor" />,
+        text: "Pages",
+        enabled: true,
       },
       {
         pageLink: "/a/settings",

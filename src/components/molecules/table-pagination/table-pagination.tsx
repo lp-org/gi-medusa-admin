@@ -27,7 +27,6 @@ export const TablePagination = <T,>({
     previousPage,
     nextPage,
   } = table
-
   const { pageIndex, pageSize } = getState().pagination
 
   const { from, to } = useMemo(() => {
@@ -40,16 +39,16 @@ export const TablePagination = <T,>({
   return (
     <div
       className={clsx(
-        "inter-small-regular text-grey-50 flex items-center justify-between",
+        "inter-small-regular flex items-center justify-between text-grey-50",
         className
       )}
     >
       <div>
         <p>{`${from} – ${to} of ${count} results`}</p>
       </div>
-      <div className="gap-x-small flex items-center">
+      <div className="flex items-center gap-x-small">
         <p>{`${getState().pagination.pageIndex + 1} of ${getPageCount()}`}</p>
-        <div className="gap-x-2xsmall flex items-center">
+        <div className="flex items-center gap-x-2xsmall">
           <Button
             variant="ghost"
             size="small"

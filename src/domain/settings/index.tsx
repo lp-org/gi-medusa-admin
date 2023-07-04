@@ -23,6 +23,7 @@ import Users from "./users"
 
 import Roles from "./roles"
 import { useIsPermission } from "../../hooks/use-is-permission"
+import StoreContent from "./content"
 
 const SettingsIndex = () => {
   const isPermission = useIsPermission()
@@ -94,7 +95,7 @@ const SettingsIndex = () => {
           to={`/a/settings/personal-information`}
         />
       )}
-   
+
       {isPermission("setting.tax") && (
         <SettingsCard
           heading={"Tax Settings"}
@@ -125,6 +126,14 @@ const SettingsIndex = () => {
           />
         </FeatureToggle>
       )}
+      {
+        <SettingsCard
+          heading={"Content management"}
+          description={"Manage your storefront content"}
+          icon={<KeyIcon />}
+          to={`/a/settings/store-content`}
+        />
+      }
     </SettingsOverview>
   )
 }
@@ -145,6 +154,7 @@ const Settings = () => {
       <Route path="/role" element={<Roles />} />
       <Route path="/personal-information" element={<PersonalInformation />} />
       <Route path="/taxes" element={<Taxes />} />
+      <Route path="/store-content" element={<StoreContent />} />
     </Routes>
   )
 }

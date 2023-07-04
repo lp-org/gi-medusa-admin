@@ -46,7 +46,10 @@ const InviteModal: React.FC<InviteModalProps> = ({ handleClose }) => {
     )
   }
 
-  const { data } = useQuery({ queryFn: api.roles.list, queryKey: ["roleList"] })
+  const { data } = useQuery({
+    queryFn: () => api.roles.list(),
+    queryKey: ["roleList"],
+  })
 
   const roleOptions = useMemo(() => {
     const list = data?.data.data
@@ -61,7 +64,7 @@ const InviteModal: React.FC<InviteModalProps> = ({ handleClose }) => {
             <span className="inter-xlarge-semibold">Invite Users</span>
           </Modal.Header>
           <Modal.Content>
-            <div className="gap-y-base flex flex-col">
+            <div className="flex flex-col gap-y-base">
               <InputField
                 label="Email"
                 placeholder="lebron@james.com"
@@ -92,7 +95,7 @@ const InviteModal: React.FC<InviteModalProps> = ({ handleClose }) => {
             <div className="flex h-8 w-full justify-end">
               <Button
                 variant="ghost"
-                className="text-small mr-2 w-32 justify-center"
+                className="mr-2 w-32 justify-center text-small"
                 size="large"
                 type="button"
                 onClick={handleClose}
@@ -103,7 +106,7 @@ const InviteModal: React.FC<InviteModalProps> = ({ handleClose }) => {
                 loading={isLoading}
                 disabled={isLoading}
                 size="large"
-                className="text-small w-32 justify-center"
+                className="w-32 justify-center text-small"
                 variant="primary"
               >
                 Invite

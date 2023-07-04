@@ -1,3 +1,4 @@
+import queryString from "query-string"
 import medusaRequest from "./request"
 
 const removeNullish = (obj) =>
@@ -134,6 +135,16 @@ export default {
     listPaymentProviders() {
       const path = `/admin/store/payment-providers`
       return medusaRequest("GET", path)
+    },
+
+    content() {
+      const path = `/admin/store-content`
+      return medusaRequest("GET", path)
+    },
+
+    postContent(data) {
+      const path = `/admin/store-content`
+      return medusaRequest("POST", path, data)
     },
   },
   shippingProfiles: {
@@ -728,8 +739,11 @@ export default {
   },
 
   roles: {
-    list() {
-      const path = `/admin/roles`
+    list(search = {}) {
+      const params = Object.keys(search)
+        .map((k) => `${k}=${search[k]}`)
+        .join("&")
+      const path = `/admin/roles${params && `?${params}`}`
       return medusaRequest("GET", path)
     },
     add(data) {
@@ -752,16 +766,35 @@ export default {
 
   permissions: {
     list(search = {}) {
-      console.log(search)
       const params = Object.keys(search)
         .map((k) => `${k}=${search[k]}`)
         .join("&")
-      console.log(params)
+
       const path = `/admin/permissions${params && `?${params}`}`
       return medusaRequest("GET", path)
     },
     setRolePermission({ roleId, data }) {
       const path = `/admin/permissions/role/${roleId}`
+      return medusaRequest("PUT", path, data)
+    },
+  },
+  pages: {
+    list(search = {}) {
+      const params = queryString.stringify(search)
+
+      const path = `/admin/pages${params && `?${params}`}`
+      return medusaRequest("GET", path)
+    },
+    add(data) {
+      const path = `/admin/pages`
+      return medusaRequest("POST", path, data)
+    },
+    get(id) {
+      const path = `/admin/pages/${id}`
+      return medusaRequest("GET", path)
+    },
+    update({ id, data }) {
+      const path = `/admin/pages/${id}`
       return medusaRequest("PUT", path, data)
     },
   },

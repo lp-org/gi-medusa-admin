@@ -59,3 +59,19 @@ export type PermissionType = {
   name: string
   label?: string
 }
+
+export type SliderType = {
+  image: string
+  url?: string
+  is_active: boolean
+  open_new: boolean
+}
+
+export interface PagesType {
+  id: string
+  title: string
+  handle: string
+  description: string
+  body: string
+  publish: boolean
+}

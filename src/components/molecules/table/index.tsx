@@ -84,7 +84,7 @@ const Table = React.forwardRef<HTMLTableElement, TableProps>(
           ) : (
             <span aria-hidden />
           )}
-          <div className="gap-x-xsmall flex items-center">
+          <div className="flex items-center gap-x-xsmall">
             {tableActions && <div>{tableActions}</div>}
             {enableSearch && (
               <TableSearch
@@ -118,7 +118,7 @@ Table.Head = React.forwardRef<
   <thead
     ref={ref}
     className={clsx(
-      "inter-small-semibold text-grey-50 border-grey-20 whitespace-nowrap border-t border-b",
+      "inter-small-semibold whitespace-nowrap border-t border-b border-grey-20 text-grey-50",
       className
     )}
     {...props}
@@ -238,10 +238,10 @@ Table.Row = React.forwardRef<HTMLTableRowElement, TableRowProps>(
       <tr
         ref={ref}
         className={clsx(
-          "inter-small-regular border-grey-20 text-grey-90 border-t border-b",
+          "inter-small-regular border-t border-b border-grey-20 text-grey-90",
           className,
           {
-            "hover:bg-grey-5 cursor-pointer": linkTo !== undefined || clickable,
+            "cursor-pointer hover:bg-grey-5": linkTo !== undefined || clickable,
           }
         )}
         {...props}

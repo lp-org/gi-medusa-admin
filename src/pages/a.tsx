@@ -21,6 +21,7 @@ import SalesChannels from "../domain/sales-channels"
 import Settings from "../domain/settings"
 import { AnalyticsProvider } from "../providers/analytics-provider"
 import ProductCategories from "../domain/product-categories"
+import Pages from "../domain/pages"
 
 const IndexPage = () => {
   const navigate = useNavigate()
@@ -39,7 +40,7 @@ const DashboardRoutes = () => {
     <AnalyticsProvider writeKey={WRITE_KEY}>
       <DndProvider backend={HTML5Backend}>
         <Layout>
-          <SEO title="Medusa" />
+          <SEO title="Admin backoffice" />
           <Routes>
             <Route path="oauth/:app_name" element={<Oauth />} />
             <Route path="products/*" element={<ProductsRoute />} />
@@ -54,6 +55,7 @@ const DashboardRoutes = () => {
             <Route path="discounts/*" element={<Discounts />} />
             <Route path="customers/*" element={<Customers />} />
             <Route path="pricing/*" element={<Pricing />} />
+            <Route path="pages/*" element={<Pages />} />
             <Route path="settings/*" element={<Settings />} />
             <Route path="sales-channels/*" element={<SalesChannels />} />
             <Route
