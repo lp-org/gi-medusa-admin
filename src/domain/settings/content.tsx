@@ -25,6 +25,8 @@ import { Icon } from "@radix-ui/react-select"
 import TrashIcon from "../../components/fundamentals/icons/trash-icon"
 import Badge from "../../components/fundamentals/badge"
 import { queryClient } from "../../constants/query-client"
+import { prepareImages } from "../../utils/images"
+import InputHeader from "../../components/fundamentals/input-header"
 type StoreContentFormData = {
   facebook_url?: string
   instagram_url?: string
@@ -32,6 +34,7 @@ type StoreContentFormData = {
   email?: string
   address?: string
   logo?: string
+  favicon?: string
   slider?: SliderType[]
 }
 const ItemTypes = {
@@ -90,6 +93,7 @@ const StoreContent = () => {
     })
   }
   const logo = useWatch({ control, name: "logo" })
+  const favicon = useWatch({ control, name: "favicon" })
   return (
     <form className=" flex-col py-5">
       <BackButton
@@ -113,9 +117,7 @@ const StoreContent = () => {
           <div className="mb-large flex flex-col gap-y-xlarge">
             <div>
               <h2 className="inter-base-semibold mb-base">General</h2>
-              <div className="inter-small-semibold mb-xsmall flex w-full items-center text-grey-50">
-                <label>Logo</label>
-              </div>
+              <InputHeader label="Logo" />
 
               <FileUploadField
                 className="h-16"
@@ -135,19 +137,44 @@ const StoreContent = () => {
                     nativeFile: file,
                     selected: false,
                   }))
-                  const uploadedImgs = await api.uploads
-                    .create(toAppend.map((el) => el.nativeFile))
-                    .then(({ data }) => {
-                      const uploaded = data.uploads.map(({ url }) => url)
-                      return uploaded
-                    })
-                  setValue("logo", uploadedImgs[0])
+                  const uploadedImgs = await prepareImages(toAppend)
+
+                  setValue("logo", uploadedImgs[0].url)
                 }}
               />
               <img
                 src={logo}
                 alt=""
                 className="mx-auto mt-base w-56 rounded-base object-cover object-center"
+              />
+              <InputHeader label="Favicon" className="mt-base" />
+              <FileUploadField
+                className="h-16"
+                placeholder="1:1 recommended, .ico format recommended"
+                filetypes={[
+                  "image/jpeg",
+                  "image/png",
+                  "image/webp",
+                  "image/x-icon",
+                ]}
+                onFileChosen={async (files) => {
+                  if (files.length === 0) return
+                  const toAppend = files.map((file) => ({
+                    url: URL.createObjectURL(file),
+                    name: file.name,
+                    size: file.size,
+                    nativeFile: file,
+                    selected: false,
+                  }))
+                  const uploadedImgs = await prepareImages(toAppend)
+
+                  setValue("favicon", uploadedImgs[0].url)
+                }}
+              />
+              <img
+                src={favicon}
+                alt=""
+                className="mx-auto mt-base w-24 rounded-base object-cover object-center"
               />
               <Input
                 className="mt-base"
