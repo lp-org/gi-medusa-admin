@@ -22,6 +22,7 @@ import Settings from "../domain/settings"
 import { AnalyticsProvider } from "../providers/analytics-provider"
 import ProductCategories from "../domain/product-categories"
 import Pages from "../domain/pages"
+import Analytics from "../domain/analytics"
 
 const IndexPage = () => {
   const navigate = useNavigate()
@@ -56,6 +57,7 @@ const DashboardRoutes = () => {
             <Route path="customers/*" element={<Customers />} />
             <Route path="pricing/*" element={<Pricing />} />
             <Route path="pages/*" element={<Pages />} />
+            <Route path="analytics/*" element={<Analytics />} />
             <Route path="settings/*" element={<Settings />} />
             <Route path="sales-channels/*" element={<SalesChannels />} />
             <Route

@@ -109,7 +109,7 @@ const UserTable: React.FC<UserTableProps> = ({
     }
 
     return `${window.location.origin}${
-      __BASE__ ? `${__BASE__}/` : "/"
+      __BASE__ ? `${__BASE__}` : "/"
     }invite?token={invite_token}`
   }, [store])
 

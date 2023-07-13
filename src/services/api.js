@@ -798,4 +798,11 @@ export default {
       return medusaRequest("PUT", path, data)
     },
   },
+  summary: {
+    get(search = {}) {
+      const params = queryString.stringify(search)
+      const path = `/admin/summary${params && `?${params}`}`
+      return medusaRequest("GET", path)
+    },
+  },
 }

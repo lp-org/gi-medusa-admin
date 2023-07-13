@@ -67,6 +67,12 @@ export const sidebarMenu = () => {
         enabled: isPermissionEnabled(["pricings.view", "pricings.add"]),
       },
       {
+        pageLink: "/a/analytics",
+        icon: <FileIcon size={ICON_SIZE} fill="currentColor" />,
+        text: "Analytics",
+        enabled: true,
+      },
+      {
         pageLink: "/a/pages",
         icon: <FileIcon size={ICON_SIZE} fill="currentColor" />,
         text: "Pages",

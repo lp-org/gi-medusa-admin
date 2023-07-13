@@ -366,10 +366,15 @@
         @apply cursor-pointer;
       }
     }
+    .react-datepicker__day--in-selecting-range, .react-datepicker__day--in-range {
+      @apply bg-violet-30 text-grey-0 inter-base-semibold leading-none !important;
+    }
     .chosen,
     .react-datepicker__day--keyboard-selected {
       @apply bg-violet-60 text-grey-0 inter-base-semibold leading-none !important;
     }
+
+    
   }
 
   .time-list::-webkit-scrollbar {

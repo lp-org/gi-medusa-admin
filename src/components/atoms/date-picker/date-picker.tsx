@@ -10,7 +10,7 @@ import CustomHeader from "./custom-header"
 import { DateTimePickerProps } from "./types"
 import InputContainer from "../../fundamentals/input-container"
 import InputHeader from "../../fundamentals/input-header"
-import ReactDatePicker from "react-datepicker"
+import ReactDatePicker, { ReactDatePickerProps } from "react-datepicker"
 import clsx from "clsx"
 import moment from "moment"
 
@@ -34,13 +34,17 @@ const getDateClassname = (
   return classes.join(" ")
 }
 
-const DatePicker: React.FC<DateTimePickerProps> = ({
+const DatePicker: React.FC<
+  DateTimePickerProps & Omit<ReactDatePickerProps, "onChange">
+> = ({
   date,
   onSubmitDate,
   label = "start date",
   required = false,
   tooltipContent,
   tooltip,
+  greyPastDates = true,
+  ...rest
 }) => {
   const [tempDate, setTempDate] = useState<Date | null>(date || null)
   const [isOpen, setIsOpen] = useState(false)
@@ -69,14 +73,14 @@ const DatePicker: React.FC<DateTimePickerProps> = ({
       <PopoverPrimitive.Root open={isOpen} onOpenChange={setIsOpen}>
         <PopoverPrimitive.Trigger asChild>
           <button
-            className={clsx("rounded-rounded w-full border ", {
-              "shadow-input border-violet-60": isOpen,
+            className={clsx("w-full rounded-rounded border ", {
+              "border-violet-60 shadow-input": isOpen,
               "border-grey-20": !isOpen,
             })}
             type="button"
           >
             <InputContainer className="shadown-none border-0 focus-within:shadow-none">
-              <div className="text-grey-50 flex w-full justify-between pr-0.5">
+              <div className="flex w-full justify-between pr-0.5 text-grey-50">
                 {label && (
                   <InputHeader
                     {...{
@@ -100,10 +104,12 @@ const DatePicker: React.FC<DateTimePickerProps> = ({
         <PopoverPrimitive.Content
           side="top"
           sideOffset={8}
-          className="rounded-rounded border-grey-20  bg-grey-0 shadow-dropdown w-full border px-8"
+          className="z-10 w-full rounded-rounded border border-grey-20 bg-grey-0 px-8 shadow-dropdown"
         >
           <CalendarComponent
             date={tempDate}
+            greyPastDates={greyPastDates}
+            {...rest}
             onChange={(date) => setTempDate(date)}
           />
           <div className="mb-8 mt-5 flex w-full">
@@ -111,7 +117,7 @@ const DatePicker: React.FC<DateTimePickerProps> = ({
               variant="ghost"
               size="medium"
               onClick={() => setIsOpen(false)}
-              className="border-grey-20 mr-2 flex w-1/3 justify-center border"
+              className="mr-2 flex w-1/3 justify-center border border-grey-20"
             >
               Cancel
             </Button>
@@ -141,7 +147,8 @@ export const CalendarComponent = ({
   date,
   onChange,
   greyPastDates = true,
-}: CalendarComponentProps) => (
+  ...rest
+}: CalendarComponentProps & ReactDatePickerProps) => (
   <ReactDatePicker
     selected={date}
     inline
@@ -149,6 +156,7 @@ export const CalendarComponent = ({
     calendarClassName="date-picker"
     dayClassName={(d) => getDateClassname(d, date, greyPastDates)}
     renderCustomHeader={({ ...props }) => <CustomHeader {...props} />}
+    {...rest}
   />
 )
 

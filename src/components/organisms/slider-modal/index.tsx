@@ -1,19 +1,13 @@
-import { useMutation, useQueries, useQuery } from "@tanstack/react-query"
-import React, { useEffect, useMemo, useState } from "react"
-import { Controller, useFieldArray, useForm, useWatch } from "react-hook-form"
+import React from "react"
+import { useForm, useWatch } from "react-hook-form"
 import useNotification from "../../../hooks/use-notification"
-import { getErrorMessage } from "../../../utils/error-messages"
 import Button from "../../fundamentals/button"
 
 import Modal from "../../molecules/modal"
 import api from "../../../services/api"
 import Checkbox from "../../atoms/checkbox"
 
-import { CollapsibleTree } from "../../molecules/collapsible-tree"
-
-import { PermissionType, SliderType } from "../../../types/shared"
-import { queryClient } from "../../../constants/query-client"
-import { startCase } from "lodash"
+import { SliderType } from "../../../types/shared"
 
 import FileUploadField from "../../atoms/file-upload-field"
 import Input from "../../molecules/input"

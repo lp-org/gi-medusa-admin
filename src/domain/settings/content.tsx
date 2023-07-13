@@ -1,7 +1,13 @@
 import { Store } from "@medusajs/medusa"
 import { useAdminStore, useAdminUpdateStore } from "medusa-react"
 import { FC, useEffect, useRef, useState } from "react"
-import { useFieldArray, useForm, useWatch } from "react-hook-form"
+import {
+  Control,
+  FieldName,
+  useFieldArray,
+  useForm,
+  useWatch,
+} from "react-hook-form"
 import BackButton from "../../components/atoms/back-button"
 import Input from "../../components/molecules/input"
 import BodyCard from "../../components/organisms/body-card"
@@ -36,6 +42,7 @@ type StoreContentFormData = {
   logo?: string
   favicon?: string
   slider?: SliderType[]
+  sliderProduct?: SliderType[]
 }
 const ItemTypes = {
   CARD: "card",
@@ -44,25 +51,19 @@ const ItemTypes = {
 const StoreContent = () => {
   const { register, reset, handleSubmit, control, watch, setValue } =
     useForm<StoreContentFormData>()
-  const { append, update, swap, remove } = useFieldArray({
-    control,
-    name: "slider",
-  })
+
   const { data } = useQuery<AxiosResponse<StoreContentFormData>>({
     queryKey: ["storeContent"],
     queryFn: api.store.content,
   })
   const { mutate } = useMutation({ mutationFn: api.store.postContent })
   const notification = useNotification()
-  const [contentSliderModal, setContentSliderModal] = useState(false)
 
   const handleCancel = () => {
     if (data?.data) {
       reset(data?.data)
     }
   }
-
-  const slider = useWatch({ control, name: "slider" })
 
   useEffect(() => {
     if (data?.data) reset(data?.data)
@@ -211,47 +212,23 @@ const StoreContent = () => {
               />
             </div>
           </div>
-
           <div>
-            <div className="flex flex-row">
-              <h2 className="inter-base-semibold mb-base">Sliders</h2>
-              <Button
-                className="ml-auto"
-                variant="secondary"
-                type="button"
-                onClick={() => setContentSliderModal(true)}
-              >
-                + Add new slider
-              </Button>
+            <div className="">
+              <h2 className="inter-base-semibold mb-base">
+                Sliders (Homepage)
+              </h2>
+              <SliderForm control={control} name={"slider"} />
             </div>
 
-            <div className="flex flex-col">
-              {slider?.map((el, i) => (
-                <SliderCard
-                  key={i}
-                  index={i}
-                  data={el}
-                  remove={remove}
-                  update={update}
-                  moveCard={swap}
-                />
-              ))}
+            <div className="">
+              <h2 className="inter-base-semibold mb-base">
+                Sliders (Products)
+              </h2>
+              <SliderForm control={control} name={"slider_product"} />
             </div>
-
-            {/* <Input
-                label="Slider"
-                {...register("swap_link_template")}
-                placeholder="https://acme.inc/swap={swap_id}"
-              /> */}
           </div>
         </div>
       </BodyCard>
-      {contentSliderModal && (
-        <SliderModal
-          handleSave={append}
-          handleClose={() => setContentSliderModal(false)}
-        />
-      )}
     </form>
   )
 }
@@ -422,5 +399,54 @@ const SliderCard: FC<SliderCardProps> = ({
         />
       )}
     </div>
+  )
+}
+
+const SliderForm = ({
+  control,
+  name,
+}: {
+  control: Control<StoreContentFormData>
+  name: any
+}) => {
+  const { append, update, swap, remove } = useFieldArray({
+    control,
+    name,
+  })
+  const [contentSliderModal, setContentSliderModal] = useState(false)
+  const slider = useWatch({ control, name })
+  return (
+    <>
+      <div className="flex flex-row">
+        <Button
+          className="ml-auto"
+          size="small"
+          variant="secondary"
+          type="button"
+          onClick={() => setContentSliderModal(true)}
+        >
+          + Add new slider
+        </Button>
+      </div>
+
+      <div className="mb-4 flex flex-col">
+        {slider?.map((el, i) => (
+          <SliderCard
+            key={i}
+            index={i}
+            data={el}
+            remove={remove}
+            update={update}
+            moveCard={swap}
+          />
+        ))}
+      </div>
+      {contentSliderModal && (
+        <SliderModal
+          handleSave={append}
+          handleClose={() => setContentSliderModal(false)}
+        />
+      )}
+    </>
   )
 }

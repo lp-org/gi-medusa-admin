@@ -87,14 +87,13 @@ const SettingsIndex = () => {
           to={`/a/settings/role`}
         />
       )}
-      {isPermission("setting.personal-information") && (
-        <SettingsCard
-          heading={"Personal Information"}
-          description={"Manage your Medusa profile"}
-          icon={<HappyIcon />}
-          to={`/a/settings/personal-information`}
-        />
-      )}
+
+      <SettingsCard
+        heading={"Personal Information"}
+        description={"Manage your Medusa profile"}
+        icon={<HappyIcon />}
+        to={`/a/settings/personal-information`}
+      />
 
       {isPermission("setting.tax") && (
         <SettingsCard

@@ -61,6 +61,7 @@
         "react-router-dom": "6.8.0",
         "react-select": "^5.5.4",
         "react-table": "^7.7.0",
+        "recharts": "^2.7.2",
         "type-fest": "^3.6.0",
         "zustand": "^4.3.8"
     },
