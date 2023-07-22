@@ -28,17 +28,17 @@ const Topbar: React.FC = () => {
   )
 
   return (
-    <div className="min-h-topbar max-h-topbar pr-xlarge pl-base bg-grey-0 border-grey-20 sticky top-0 z-40 flex w-full items-center justify-between border-b">
+    <div className="sticky top-0 z-40 flex max-h-topbar min-h-topbar w-full items-center justify-between border-b border-grey-20 bg-grey-0 pr-xlarge pl-base">
       <SearchBar />
       <div className="flex items-center">
-        <Button
+        {/* <Button
           size="small"
           variant="ghost"
           className="mr-3 h-8 w-8"
           onClick={() => setShowSupportForm(!showSupportform)}
         >
           <HelpCircleIcon size={24} />
-        </Button>
+        </Button> */}
 
         <NotificationBell
           onClick={onNotificationBellClick}
@@ -46,12 +46,12 @@ const Topbar: React.FC = () => {
           hasNotifications={!!batchJobs?.length}
         />
       </div>
-      {showSupportform && (
+      {/* {showSupportform && (
         <MailDialog
           open={showSupportform}
           onClose={() => setShowSupportForm(false)}
         />
-      )}
+      )} */}
       {activityDrawerState && (
         <ActivityDrawer onDismiss={activityDrawerClose} />
       )}
