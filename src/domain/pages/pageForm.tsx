@@ -18,6 +18,11 @@ import { queryClient } from "../../constants/query-client"
 import { getErrorMessage } from "../../utils/error-messages"
 import { PagesType } from "../../types/shared"
 import { useNavigate } from "react-router-dom"
+import FocusModal from "../../components/molecules/modal/focus-modal"
+import FormHeader from "../pricing/pricing-form/form-header"
+import Button from "../../components/fundamentals/button"
+import CrossIcon from "../../components/fundamentals/icons/cross-icon"
+
 function convertTitleToUrl(title) {
   if (!title) return
   // Remove special characters and convert to lowercase
@@ -123,75 +128,98 @@ const PageForm: FC<PageFormProps> = ({ payloadData }) => {
     if (payloadData) reset(payloadData)
   }
   return (
-    <form className="flex-col py-5">
-      <BodyCard
-        customActionable={
-          <Controller
-            name="publish"
-            control={control}
-            render={({ field: { value, onChange } }) => {
-              return (
-                <div className="flex w-full flex-row">
-                  <InputHeader label="Publish" className="mr-2 w-auto" />
-                  <Switch
-                    checked={value}
-                    onCheckedChange={onChange}
-                    className="w-full"
-                  />
-                </div>
-              )
-            }}
-          />
-        }
-        events={[
-          {
-            label: "Save",
-            type: "button",
-            onClick: handleSubmit(onSubmit),
-          },
-          { label: "Cancel", type: "button", onClick: handleCancel },
-        ]}
-        title="Pages"
-        subtitle="Manage your Pages"
-      >
-        <Input
-          className="mt-base"
-          label="Title"
-          {...register("title")}
-          placeholder="Terms of use"
-          required
-        />
-        <Input
-          className="mt-base"
-          label="Handle"
-          {...register("handle")}
-          placeholder="terms-of-use"
-        />
-
-        <TextArea
-          className="mt-base"
-          label="Description"
-          {...register("description")}
-          placeholder="This will show in the meta description"
-        />
-
-        <div className="mt-base mb-32 w-full rounded">
-          <InputHeader label="Body" />
-          <Controller
-            control={control}
-            name="body"
-            render={({ field }) => (
-              <ReactQuill
-                className="h-72"
-                modules={modules}
-                theme="snow"
-                value={field.value}
-                onChange={(e) => field.onChange(e)}
+    <form>
+      <FocusModal>
+        <FocusModal.Header>
+          <div className="flex w-full justify-between px-8 medium:w-8/12">
+            <Button
+              size="small"
+              variant="ghost"
+              type="button"
+              onClick={() => navigate("/a/pages")}
+            >
+              <CrossIcon size={20} />
+            </Button>
+            <div className="flex gap-x-small">
+              {payloadData && (
+                <Button
+                  size="small"
+                  variant="ghost"
+                  type="button"
+                  onClick={handleCancel}
+                >
+                  Reset
+                </Button>
+              )}
+              <Controller
+                name="publish"
+                control={control}
+                render={({ field: { value, onChange } }) => {
+                  return (
+                    <div className="flex flex-row items-center">
+                      <InputHeader label="Publish" className="mr-2 w-auto" />
+                      <Switch
+                        checked={value}
+                        onCheckedChange={onChange}
+                        className="w-full"
+                      />
+                    </div>
+                  )
+                }}
               />
-            )}
-          ></Controller>
-        </div>
-      </BodyCard>
+              <Button
+                size="small"
+                variant="primary"
+                type="button"
+                onClick={handleSubmit(onSubmit)}
+              >
+                Save page
+              </Button>
+            </div>
+          </div>
+        </FocusModal.Header>
+        <FocusModal.Main className="no-scrollbar flex w-full justify-center">
+          <div className="my-16 max-w-[700px] small:w-4/5 medium:w-7/12 large:w-6/12">
+            <Input
+              className="mt-base"
+              label="Title"
+              {...register("title")}
+              placeholder="Terms of use"
+              required
+            />
+            <Input
+              className="mt-base"
+              label="Handle"
+              {...register("handle")}
+              placeholder="terms-of-use"
+            />
+
+            <TextArea
+              className="mt-base"
+              label="Description"
+              {...register("description")}
+              placeholder="This will show in the meta description"
+            />
+
+            <div className="mt-base mb-32 w-full rounded">
+              <InputHeader label="Body" />
+              <Controller
+                control={control}
+                name="body"
+                render={({ field }) => (
+                  <ReactQuill
+                    className="h-72"
+                    modules={modules}
+                    theme="snow"
+                    value={field.value}
+                    onChange={(e) => field.onChange(e)}
+                  />
+                )}
+              ></Controller>
+            </div>
+          </div>
+        </FocusModal.Main>
+      </FocusModal>
     </form>
   )
 }

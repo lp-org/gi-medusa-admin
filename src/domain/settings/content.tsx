@@ -51,7 +51,8 @@ const ItemTypes = {
 const StoreContent = () => {
   const { register, reset, handleSubmit, control, watch, setValue } =
     useForm<StoreContentFormData>()
-
+  const logo = useWatch({ control, name: "logo" })
+  const favicon = useWatch({ control, name: "favicon" })
   const { data } = useQuery<AxiosResponse<StoreContentFormData>>({
     queryKey: ["storeContent"],
     queryFn: api.store.content,
@@ -93,8 +94,7 @@ const StoreContent = () => {
       },
     })
   }
-  const logo = useWatch({ control, name: "logo" })
-  const favicon = useWatch({ control, name: "favicon" })
+
   return (
     <form className=" flex-col py-5">
       <BackButton
@@ -413,8 +413,10 @@ const SliderForm = ({
     control,
     name,
   })
+
   const [contentSliderModal, setContentSliderModal] = useState(false)
   const slider = useWatch({ control, name })
+  console.log(name, slider)
   return (
     <>
       <div className="flex flex-row">

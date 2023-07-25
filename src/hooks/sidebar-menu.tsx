@@ -10,12 +10,19 @@ import CashIcon from "../components/fundamentals/icons/cash-icon"
 import GearIcon from "../components/fundamentals/icons/gear-icon"
 import GiftIcon from "../components/fundamentals/icons/gift-icon"
 import FileIcon from "../components/fundamentals/icons/file-icon"
+import ChartIcon from "../components/fundamentals/icons/chart-icon"
 const ICON_SIZE = 20
 export const sidebarMenu = () => {
   const isPermissionEnabled = useIsPermission()
   const { isFeatureEnabled } = useFeatureFlag()
   return useMemo(() => {
     return [
+      {
+        pageLink: "/a/analytics",
+        icon: <ChartIcon size={ICON_SIZE} />,
+        text: "Analytics",
+        enabled: true,
+      },
       {
         pageLink: "/a/orders",
         icon: <CartIcon size={ICON_SIZE} />,
@@ -32,7 +39,9 @@ export const sidebarMenu = () => {
         pageLink: "/a/product-categories",
         icon: <SwatchIcon size={ICON_SIZE} />,
         text: "Categories",
-        enabled: isFeatureEnabled("product_categories"),
+        enabled:
+          isFeatureEnabled("product_categories") &&
+          isPermissionEnabled(["categories.view", "categories.add"]),
       },
       {
         pageLink: "/a/customers",
@@ -67,16 +76,10 @@ export const sidebarMenu = () => {
         enabled: isPermissionEnabled(["pricings.view", "pricings.add"]),
       },
       {
-        pageLink: "/a/analytics",
-        icon: <FileIcon size={ICON_SIZE} fill="currentColor" />,
-        text: "Analytics",
-        enabled: true,
-      },
-      {
         pageLink: "/a/pages",
-        icon: <FileIcon size={ICON_SIZE} fill="currentColor" />,
+        icon: <FileIcon size={ICON_SIZE} />,
         text: "Pages",
-        enabled: true,
+        enabled: isPermissionEnabled(["pages.view", "pages.add"]),
       },
       {
         pageLink: "/a/settings",

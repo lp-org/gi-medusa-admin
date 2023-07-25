@@ -14,6 +14,11 @@ import { ColumnDef, PaginationState } from "@tanstack/react-table"
 import { PagesType } from "../../types/shared"
 import Edit from "./edit"
 import Badge from "../../components/fundamentals/badge"
+import priceList from "@medusajs/medusa/dist/repositories/price-list"
+import Fade from "../../components/atoms/fade-wrapper"
+
+import { ViewType } from "../pricing/pricing-form/types"
+import PageForm from "./pageForm"
 
 const PagesIndex = () => {
   const navigate = useNavigate()
@@ -76,6 +81,7 @@ const PagesIndex = () => {
       icon: <PlusIcon size={20} />,
     },
   ]
+
   return (
     <div className="flex h-full flex-col">
       <div className="flex w-full grow flex-col">
