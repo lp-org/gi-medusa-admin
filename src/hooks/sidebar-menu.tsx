@@ -88,5 +88,5 @@ export const sidebarMenu = () => {
         enabled: true,
       },
     ]
-  }, [])
+  }, [isFeatureEnabled])
 }

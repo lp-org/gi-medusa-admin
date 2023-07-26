@@ -53,6 +53,7 @@ const Sidebar: React.FC = () => {
             .filter((el) => el.enabled)
             .map((el) => (
               <SidebarMenuItem
+                key={el.text}
                 pageLink={el.pageLink}
                 icon={el.icon}
                 triggerHandler={triggerHandler}
