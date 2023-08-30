@@ -9,19 +9,20 @@ import ReactQuill, { Quill } from "react-quill"
 import "react-quill/dist/quill.snow.css"
 import ImageUploader from "quill-image-uploader"
 import api from "../../services/api"
-import { FC, useEffect, useMemo } from "react"
+import { FC, useEffect, useMemo, useState } from "react"
 import Checkbox from "../../components/atoms/checkbox"
 import Switch from "../../components/atoms/switch"
-import { useMutation } from "@tanstack/react-query"
+import { useMutation, useQuery } from "@tanstack/react-query"
 import useNotification from "../../hooks/use-notification"
 import { queryClient } from "../../constants/query-client"
 import { getErrorMessage } from "../../utils/error-messages"
-import { PagesType } from "../../types/shared"
+import { Option, PagesType } from "../../types/shared"
 import { useNavigate } from "react-router-dom"
 import FocusModal from "../../components/molecules/modal/focus-modal"
 import FormHeader from "../pricing/pricing-form/form-header"
 import Button from "../../components/fundamentals/button"
 import CrossIcon from "../../components/fundamentals/icons/cross-icon"
+import Select from "../../components/molecules/select/next-select/select"
 
 function convertTitleToUrl(title) {
   if (!title) return
@@ -52,6 +53,8 @@ const PageForm: FC<PageFormProps> = ({ payloadData }) => {
   const navigate = useNavigate()
   const { register, reset, handleSubmit, control, watch, setValue } =
     useForm<PagesType>({})
+
+  const [handleSwitch, setHandleSwitch] = useState(false)
   const modules = useMemo(() => {
     return {
       toolbar: [
@@ -105,7 +108,7 @@ const PageForm: FC<PageFormProps> = ({ payloadData }) => {
     },
   })
   const onSubmit = (data: PagesType) => {
-    const { id, ...payload } = data
+    const { id, rank, ...payload } = data
     payloadData
       ? mutate({
           id,
@@ -115,18 +118,38 @@ const PageForm: FC<PageFormProps> = ({ payloadData }) => {
             description: data.description,
             body: data.body,
             publish: data.publish,
+            customize: data.customize,
+            rank: +data.rank,
           },
         })
-      : mutate(data)
+      : mutate(payload)
   }
   const title = useWatch({ control, name: "title" })
+  const customize = useWatch({ control, name: "customize" })
   useEffect(() => {
-    setValue("handle", convertTitleToUrl(title))
-  }, [title])
+    if (!customize) setValue("handle", convertTitleToUrl(title))
+  }, [title, customize])
 
   const handleCancel = () => {
     if (payloadData) reset(payloadData)
   }
+
+  const { data, isLoading } = useQuery({
+    queryFn: api.pages.key,
+    queryKey: ["handleKeys"],
+  })
+  const handleKeys = data?.data
+
+  const [handleCustomize, setHandleCustomize] = useState<Option>()
+  useEffect(() => {
+    const selectedOption = handleKeys?.find(
+      (el) => el.key === payloadData?.handle
+    )
+    setHandleCustomize({
+      label: selectedOption?.key,
+      value: selectedOption?.key,
+    })
+  }, [handleKeys])
   return (
     <form>
       <FocusModal>
@@ -187,13 +210,43 @@ const PageForm: FC<PageFormProps> = ({ payloadData }) => {
               placeholder="Terms of use"
               required
             />
-            <Input
-              className="mt-base"
-              label="Handle"
-              {...register("handle")}
-              placeholder="terms-of-use"
-            />
-
+            <div className="mt-base flex flex-row items-center gap-4">
+              {customize ? (
+                <Select
+                  label="Handle"
+                  value={handleCustomize}
+                  onChange={(e: Option) => {
+                    setHandleCustomize(e)
+                    setValue("handle", e.value)
+                  }}
+                  options={
+                    handleKeys?.map((el) => ({
+                      value: el.key,
+                      label: el.key,
+                    })) || []
+                  }
+                />
+              ) : (
+                <Input
+                  label="Handle"
+                  {...register("handle")}
+                  placeholder="terms-of-use"
+                />
+              )}
+              <div>
+                <InputHeader label="Customize" />
+                <Controller
+                  name="customize"
+                  control={control}
+                  render={({ field }) => (
+                    <Switch
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                    />
+                  )}
+                ></Controller>
+              </div>
+            </div>
             <TextArea
               className="mt-base"
               label="Description"
@@ -217,6 +270,16 @@ const PageForm: FC<PageFormProps> = ({ payloadData }) => {
                 )}
               ></Controller>
             </div>
+
+            {payloadData && (
+              <Input
+                type="number"
+                className="mt-base"
+                label="Rank"
+                {...register("rank")}
+                placeholder="Sort order"
+              />
+            )}
           </div>
         </FocusModal.Main>
       </FocusModal>

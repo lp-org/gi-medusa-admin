@@ -49,7 +49,22 @@ const PagesIndex = () => {
           <Badge variant="warning"> Draft</Badge>
         ),
     },
-
+    {
+      accessorKey: "customize",
+      header: "Customize",
+      size: 200,
+      cell: ({ row }) =>
+        row.original.customize ? (
+          <Badge variant="success"> YES</Badge>
+        ) : (
+          <Badge variant="warning"> NO</Badge>
+        ),
+    },
+    {
+      accessorKey: "rank",
+      header: "Rank",
+      size: 100,
+    },
     {
       id: "action",
       meta: "flex flex-row-reverse ml-auto",

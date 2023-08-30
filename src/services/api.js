@@ -797,6 +797,10 @@ export default {
       const path = `/admin/pages/${id}`
       return medusaRequest("PUT", path, data)
     },
+    key() {
+      const path = `/admin/pagesCustomizeKey`
+      return medusaRequest("GET", path)
+    },
   },
   summary: {
     get(search = {}) {
