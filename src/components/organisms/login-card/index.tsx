@@ -48,7 +48,7 @@ const LoginCard = ({ toResetPassword }: LoginCardProps) => {
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="flex flex-col items-center">
         <h1 className="inter-xlarge-semibold mb-large text-[20px] text-grey-90">
-          Log in to Medusa
+          Log in to admin panel
         </h1>
         <div>
           <SigninInput
