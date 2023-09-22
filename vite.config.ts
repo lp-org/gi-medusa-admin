@@ -12,5 +12,6 @@ import react from "@vitejs/plugin-react"
       define: {
           __BASE__: JSON.stringify("/"),
           __MEDUSA_BACKEND_URL__: JSON.stringify("http://localhost:9000"),
+           'process.env': {}
       },
   })
