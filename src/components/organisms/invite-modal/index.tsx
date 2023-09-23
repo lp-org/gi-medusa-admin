@@ -1,6 +1,7 @@
 import { useAdminCreateInvite } from "medusa-react"
 import React, { useMemo } from "react"
 import { Controller, useForm } from "react-hook-form"
+import { useTranslation } from "react-i18next"
 import useNotification from "../../../hooks/use-notification"
 import { Role } from "../../../types/shared"
 import { getErrorMessage } from "../../../utils/error-messages"
@@ -23,6 +24,7 @@ type InviteModalFormData = {
 
 const InviteModal: React.FC<InviteModalProps> = ({ handleClose }) => {
   const notification = useNotification()
+  const { t } = useTranslation()
 
   const { mutate, isLoading } = useMutation({ mutationFn: api.invites.create })
 
@@ -36,11 +38,25 @@ const InviteModal: React.FC<InviteModalProps> = ({ handleClose }) => {
       },
       {
         onSuccess: () => {
-          notification("Success", `Invitation sent to ${data.user}`, "success")
+          notification(
+            t("invite-modal-success", "Success"),
+            t(
+              "invite-modal-invitation-sent-to",
+              "Invitation sent to {{user}}",
+              {
+                user: data.user,
+              }
+            ),
+            "success"
+          )
           handleClose()
         },
         onError: (error) => {
-          notification("Error", getErrorMessage(error), "error")
+          notification(
+            t("invite-modal-error", "Error"),
+            getErrorMessage(error),
+            "error"
+          )
         },
       }
     )
@@ -56,17 +72,20 @@ const InviteModal: React.FC<InviteModalProps> = ({ handleClose }) => {
     return list ? list.map((el) => ({ value: el.id, label: el.name })) : []
   }, [data])
 
+
   return (
     <Modal handleClose={handleClose}>
       <form onSubmit={handleSubmit(onSubmit)}>
         <Modal.Body>
           <Modal.Header handleClose={handleClose}>
-            <span className="inter-xlarge-semibold">Invite Users</span>
+            <span className="inter-xlarge-semibold">
+              {t("invite-modal-invite-users", "Invite Users")}
+            </span>
           </Modal.Header>
           <Modal.Content>
             <div className="flex flex-col gap-y-base">
               <InputField
-                label="Email"
+                label={t("invite-modal-email", "Email")}
                 placeholder="lebron@james.com"
                 required
                 {...register("user", { required: true })}
@@ -78,8 +97,8 @@ const InviteModal: React.FC<InviteModalProps> = ({ handleClose }) => {
                 render={({ field: { value, onChange, onBlur, ref } }) => {
                   return (
                     <NextSelect
-                      label="Role"
-                      placeholder="Select role"
+                      label={t("invite-modal-role", "Role")}
+                      placeholder={t("invite-modal-select-role", "Select role")}
                       onBlur={onBlur}
                       ref={ref}
                       onChange={onChange}
@@ -100,7 +119,7 @@ const InviteModal: React.FC<InviteModalProps> = ({ handleClose }) => {
                 type="button"
                 onClick={handleClose}
               >
-                Cancel
+                {t("invite-modal-cancel", "Cancel")}
               </Button>
               <Button
                 loading={isLoading}
@@ -109,7 +128,7 @@ const InviteModal: React.FC<InviteModalProps> = ({ handleClose }) => {
                 className="w-32 justify-center text-small"
                 variant="primary"
               >
-                Invite
+                {t("invite-modal-invite", "Invite")}
               </Button>
             </div>
           </Modal.Footer>

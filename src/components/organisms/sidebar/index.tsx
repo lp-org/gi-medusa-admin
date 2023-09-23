@@ -1,15 +1,19 @@
 import { useAdminStore } from "medusa-react"
 import React, { useMemo, useState } from "react"
 
+import { useTranslation } from "react-i18next"
+
 import { useFeatureFlag } from "../../../providers/feature-flag-provider"
+import { useRoutes } from "../../../providers/route-provider"
 import BuildingsIcon from "../../fundamentals/icons/buildings-icon"
 import CartIcon from "../../fundamentals/icons/cart-icon"
 import CashIcon from "../../fundamentals/icons/cash-icon"
 import GearIcon from "../../fundamentals/icons/gear-icon"
 import GiftIcon from "../../fundamentals/icons/gift-icon"
 import SaleIcon from "../../fundamentals/icons/sale-icon"
-import TagIcon from "../../fundamentals/icons/tag-icon"
+import SquaresPlus from "../../fundamentals/icons/squares-plus"
 import SwatchIcon from "../../fundamentals/icons/swatch-icon"
+import TagIcon from "../../fundamentals/icons/tag-icon"
 import UsersIcon from "../../fundamentals/icons/users-icon"
 import SidebarMenuItem from "../../molecules/sidebar-menu-item"
 import UserMenu from "../../molecules/user-menu"
@@ -17,9 +21,12 @@ import { useIsPermission } from "../../../hooks/use-is-permission"
 import { sidebarMenu } from "../../../hooks/sidebar-menu"
 
 const Sidebar: React.FC = () => {
+  const { t } = useTranslation()
   const [currentlyOpen, setCurrentlyOpen] = useState(-1)
 
   const { store } = useAdminStore()
+
+  const { getLinks } = useRoutes()
 
   const triggerHandler = () => {
     const id = triggerHandler.id++
@@ -43,8 +50,10 @@ const Sidebar: React.FC = () => {
           </div>
         </div>
         <div className="my-base flex flex-col px-2">
-          <span className="text-small font-medium text-grey-50">Store</span>
-          <span className="text-medium font-medium text-grey-90">
+          <span className="text-grey-50 text-small font-medium">
+            {t("sidebar-store", "Store")}
+          </span>
+          <span className="text-grey-90 text-medium font-medium">
             {store?.name}
           </span>
         </div>

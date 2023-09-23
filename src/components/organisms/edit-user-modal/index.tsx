@@ -2,6 +2,8 @@ import { User } from "@medusajs/medusa"
 import { useAdminUpdateUser } from "medusa-react"
 import React, { useEffect, useMemo } from "react"
 import { Controller, useForm } from "react-hook-form"
+
+import { useTranslation } from "react-i18next"
 import useNotification from "../../../hooks/use-notification"
 import { getErrorMessage } from "../../../utils/error-messages"
 import FormValidator from "../../../utils/form-validator"
@@ -40,6 +42,7 @@ const EditUserModal: React.FC<EditUserModalProps> = ({
     formState: { errors },
   } = useForm<EditUserModalFormData>()
   const notification = useNotification()
+  const { t } = useTranslation()
 
   useEffect(() => {
     reset(mapUser)
@@ -62,6 +65,26 @@ const EditUserModal: React.FC<EditUserModalProps> = ({
         },
       }
     )
+    mutate(data, {
+      onSuccess: () => {
+        notification(
+          t("edit-user-modal-success", "Success"),
+          t("edit-user-modal-user-was-updated", "User was updated"),
+          "success"
+        )
+        onSuccess()
+      },
+      onError: (error) => {
+        notification(
+          t("edit-user-modal-error", "Error"),
+          getErrorMessage(error),
+          "error"
+        )
+      },
+      onSettled: () => {
+        handleClose()
+      },
+    })
   }
   const { data } = useQuery({
     queryFn: () => api.roles.list(),
@@ -86,13 +109,18 @@ const EditUserModal: React.FC<EditUserModalProps> = ({
       <form onSubmit={handleSubmit(onSubmit)}>
         <Modal.Body>
           <Modal.Header handleClose={handleClose}>
-            <span className="inter-xlarge-semibold">Edit User</span>
+            <span className="inter-xlarge-semibold">
+              {t("edit-user-modal-edit-user", "Edit User")}
+            </span>
           </Modal.Header>
           <Modal.Content>
             <div className="mb-base grid w-full grid-cols-2 gap-large">
               <InputField
-                label="First Name"
-                placeholder="First name..."
+                label={t("edit-user-modal-first-name-label", "First Name")}
+                placeholder={t(
+                  "edit-user-modal-first-name-placeholder",
+                  "First name..."
+                )}
                 required
                 {...register("first_name", {
                   required: FormValidator.required("First name"),
@@ -102,8 +130,11 @@ const EditUserModal: React.FC<EditUserModalProps> = ({
                 errors={errors}
               />
               <InputField
-                label="Last Name"
-                placeholder="Last name..."
+                label={t("edit-user-modal-last-name-label", "Last Name")}
+                placeholder={t(
+                  "edit-user-modal-last-name-placeholder",
+                  "Last name..."
+                )}
                 required
                 {...register("last_name", {
                   required: FormValidator.required("Last name"),
@@ -135,7 +166,11 @@ const EditUserModal: React.FC<EditUserModalProps> = ({
                 </Link>
               </div>
             </div>
-            <InputField label="Email" disabled value={user.email} />
+            <InputField
+              label={t("edit-user-modal-email", "Email")}
+              disabled
+              value={user.email}
+            />
           </Modal.Content>
           <Modal.Footer>
             <div className="flex w-full justify-end">
@@ -145,7 +180,7 @@ const EditUserModal: React.FC<EditUserModalProps> = ({
                 onClick={handleClose}
                 className="mr-2"
               >
-                Cancel
+                {t("edit-user-modal-cancel", "Cancel")}
               </Button>
               <Button
                 loading={isLoading}
@@ -153,7 +188,7 @@ const EditUserModal: React.FC<EditUserModalProps> = ({
                 variant="primary"
                 size="small"
               >
-                Save
+                {t("edit-user-modal-save", "Save")}
               </Button>
             </div>
           </Modal.Footer>
