@@ -66,6 +66,7 @@ const GeneralModal = ({ product, open, onClose }: Props) => {
         subtitle: data.general.subtitle,
         // @ts-ignore
         description: data.general.description,
+          description_2: data.general.description_2,
         // @ts-ignore
         type: data.organize.type
           ? {
@@ -164,6 +165,8 @@ const getDefaultValues = (product: Product): GeneralFormWrapper => {
       material: product.material,
       handle: product.handle!,
       description: product.description || null,
+      // @ts-ignore
+      description_2: product.description_2 || null,
     },
     organize: {
       collection: product.collection

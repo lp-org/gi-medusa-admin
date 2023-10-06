@@ -254,7 +254,7 @@ const PageForm: FC<PageFormProps> = ({ payloadData }) => {
               placeholder="This will show in the meta description"
             />
 
-            <div className="mt-base mb-32 w-full rounded">
+            <div className="mt-base w-full rounded">
               <InputHeader label="Body" />
               <Controller
                 control={control}

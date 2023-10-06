@@ -397,6 +397,8 @@ const createPayload = (
     is_giftcard: false,
     collection_id: data.organize.collection?.value,
     description: data.general.description || undefined,
+    //@ts-ignore
+    description_2: data.general.description_2 || undefined,
     height: data.dimensions.height || undefined,
     length: data.dimensions.length || undefined,
     weight: data.dimensions.weight || undefined,

@@ -1,14 +1,20 @@
+import { useMemo } from "react"
 import FormValidator from "../../../../utils/form-validator"
 import { NestedForm } from "../../../../utils/nested-form"
 import InputField from "../../../molecules/input"
 import TextArea from "../../../molecules/textarea"
-
+import ReactQuill, { Quill } from "react-quill"
+import "react-quill/dist/quill.snow.css"
+import { Controller } from "react-hook-form"
+import { Label } from "@medusajs/ui"
+import InputHeader from "../../../fundamentals/input-header"
 export type GeneralFormType = {
   title: string
   subtitle: string | null
   handle: string
   material: string | null
   description: string | null
+  description_2: string| null
 }
 
 type Props = {
@@ -23,7 +29,22 @@ const GeneralForm = ({ form, requireHandle = true, isGiftCard }: Props) => {
     path,
     formState: { errors },
   } = form
-
+  const modules = useMemo(() => {
+    return {
+      toolbar: [
+        [{ header: [1, 2, false] }],
+        ["bold", "italic", "underline", "strike", "blockquote"],
+        [
+          { list: "ordered" },
+          { list: "bullet" },
+          { indent: "-1" },
+          { indent: "+1" },
+        ],
+        ["link", "image"],
+        ["clean"],
+      ],     
+    }
+  }, [])
   return (
     <div>
       <div className="gap-x-large mb-small grid grid-cols-2">
@@ -96,12 +117,32 @@ const GeneralForm = ({ form, requireHandle = true, isGiftCard }: Props) => {
         {...register(path("description"))}
         errors={errors}
       />
-      <p className="inter-base-regular text-grey-50">
+       <p className="inter-base-regular text-grey-50">
         Give your {isGiftCard ? "gift card" : "product"} a short and clear
         description.
         <br />
         120-160 characters is the recommended length for search engines.
       </p>
+
+
+       
+       <Controller
+                control={form.control}
+                name={path("description_2")} render={({field})=> (
+                 <div className="my-4">
+               <InputHeader label="Description 2" />
+                
+                <ReactQuill
+                    className="h-72"
+                    modules={modules}
+                    theme="snow"
+                    value={field.value}
+                    onChange={(e) => field.onChange(e)}
+                  /></div>
+              )}>
+                    
+                  </Controller>
+
     </div>
   )
 }

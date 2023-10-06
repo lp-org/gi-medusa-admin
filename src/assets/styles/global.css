@@ -468,3 +468,7 @@
 .remove-number-spinner {
   -moz-appearance: textfield;
 }
+
+.ql-container {
+  height: calc(100% - 42px) !important 
+}
