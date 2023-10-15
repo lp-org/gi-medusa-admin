@@ -278,6 +278,7 @@ const OrderEditChangeItem: React.FC<OrderEditChangeItemProps> = ({
             <CopyToClipboard value={lineItem?.variant?.sku} iconSize={14} />
           )}
         </span>
+        <span className="inter-small-regular text-grey-50 truncate">{lineItem?.variant.title}</span>
         <span className="inter-small-regular text-grey-50 flex">
           {lineItem?.variant?.options?.map((option) => option.value)}
         </span>

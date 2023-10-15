@@ -43,16 +43,48 @@ type StoreContentFormData = {
   favicon?: string
   slider?: SliderType[]
   sliderProduct?: SliderType[]
+  wording_1?: string
+  wording_2?: string
+    wording_3?: string
+  banner_1?: string
+    banner_2?: string
+    tiktok?: string
+
+      shopee?: string
+        whatapps?: string
+          website?: string
 }
 const ItemTypes = {
   CARD: "card",
+} 
+function isVideoURL(url: string) {
+  // Define an array of video file extensions to check
+  const videoExtensions = [
+    ".mp4",
+    ".avi",
+    ".mov",
+    ".mkv",
+    ".wmv",
+    ".flv",
+    ".webm",
+    ".3gp",
+  ]
+
+  // Extract the file extension from the URL
+  const fileExtension = url.split(".").pop()
+
+  // Check if the file extension is in the list of video extensions
+  return videoExtensions.includes("." + fileExtension)
 }
+
 
 const StoreContent = () => {
   const { register, reset, handleSubmit, control, watch, setValue } =
     useForm<StoreContentFormData>()
   const logo = useWatch({ control, name: "logo" })
   const favicon = useWatch({ control, name: "favicon" })
+    const banner_1 = useWatch({ control, name: "banner_1" })
+    const banner_2 = useWatch({ control, name: "banner_2" })
   const { data } = useQuery<AxiosResponse<StoreContentFormData>>({
     queryKey: ["storeContent"],
     queryFn: api.store.content,
@@ -210,6 +242,130 @@ const StoreContent = () => {
                 {...register("address")}
                 placeholder="Contoso Ltd, 215 E Tasman Dr, Po Box 65502, CA 95134 San Jose "
               />
+
+
+              <Input
+                className="mt-base"
+                label="Wording 1 "
+                {...register("wording_1")}
+                placeholder=""
+              />
+
+               <Input
+                className="mt-base"
+                label="Wording 2 "
+                {...register("wording_2")}
+                placeholder=""
+              />
+
+                  <Input
+                className="mt-base"
+                label="Wording 3 (Footer)"
+                {...register("wording_3")}
+                placeholder=""
+              />
+   <InputHeader label="Banner 1" className="mt-base" />
+              <FileUploadField
+                className="h-16"
+                placeholder="4:3 recommended, .mp4 .jpg .png format recommended (max: 2mb)"
+                filetypes={[
+                  "image/jpeg",
+                  "image/png",
+                  "image/webp",
+                  "video/mp4"
+                ]}
+                onFileChosen={async (files) => {
+                  if (files.length === 0) return
+                  const toAppend = files.map((file) => ({
+                    url: URL.createObjectURL(file),
+                    name: file.name,
+                    size: file.size,
+                    nativeFile: file,
+                    selected: false,
+                  }))
+                  const uploadedImgs = await prepareImages(toAppend)
+
+                  setValue("banner_1", uploadedImgs[0].url)
+                }}
+              />
+              {banner_1 && isVideoURL(banner_1)?<video
+                src={banner_1}
+                            autoPlay
+              loop
+              muted
+                  className="mx-auto mt-base w-56 rounded-base object-cover object-center"
+              />: <img
+                src={banner_1}
+                alt=""
+                className="mx-auto mt-base w-56 rounded-base object-cover object-center"
+              />}
+
+
+              <InputHeader label="Banner 2 (Footer)" className="mt-base" />
+              <FileUploadField
+                className="h-16"
+                placeholder="4:3 recommended, .mp4 .jpg .png format recommended (max: 2mb)"
+                filetypes={[
+                  "image/jpeg",
+                  "image/png",
+                  "image/webp",
+                  "video/mp4"
+                ]}
+                onFileChosen={async (files) => {
+                  if (files.length === 0) return
+                  const toAppend = files.map((file) => ({
+                    url: URL.createObjectURL(file),
+                    name: file.name,
+                    size: file.size,
+                    nativeFile: file,
+                    selected: false,
+                  }))
+                  const uploadedImgs = await prepareImages(toAppend)
+
+                  setValue("banner_2", uploadedImgs[0].url)
+                }}
+              />
+              {banner_2 && isVideoURL(banner_2)?<video
+                src={banner_2}
+                            autoPlay
+              loop
+              muted
+                  className="mx-auto mt-base w-56 rounded-base object-cover object-center"
+              />: <img
+                src={banner_2}
+                alt=""
+                className="mx-auto mt-base w-56 rounded-base object-cover object-center"
+              />}
+
+
+                  <Input
+                className="mt-base"
+                label="Tiktok "
+                {...register("tiktok")}
+                placeholder=""
+              />
+
+                <Input
+                className="mt-base"
+                label="Shopee "
+                {...register("shopee")}
+                placeholder=""
+              />
+
+                <Input
+                className="mt-base"
+                label="Whatsapps "
+                {...register("whatapps")}
+                placeholder=""
+              />
+
+                <Input
+                className="mt-base"
+                label="Website "
+                {...register("website")}
+                placeholder=""
+              />
+
             </div>
           </div>
           <div>
@@ -416,7 +572,7 @@ const SliderForm = ({
 
   const [contentSliderModal, setContentSliderModal] = useState(false)
   const slider = useWatch({ control, name })
-  console.log(name, slider)
+
   return (
     <>
       <div className="flex flex-row">

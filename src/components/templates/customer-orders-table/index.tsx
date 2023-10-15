@@ -28,6 +28,7 @@ const CustomerOrdersTable = ({ id }: Props) => {
       limit: LIMIT,
       // TODO: expanding items is currently not supported by the API, re-enable when it is.
       // expand: "items",
+      fields:'id,display_id,fulfillment_status,payment_status,total,currency_code'
     },
     {
       keepPreviousData: true,

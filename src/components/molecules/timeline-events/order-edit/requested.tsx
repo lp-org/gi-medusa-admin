@@ -19,7 +19,7 @@ const EditRequested: React.FC<RequestedProps> = ({ event }) => {
   })
 
   const notification = notifications?.find(
-    (n) => n.event_name === "order-edit.requested"
+    (n) => n.event_name === "order-edit.requested" || n.event_name === "order-edit.confirmed"
   )
 
   if (!notification) {

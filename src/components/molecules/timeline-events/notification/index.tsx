@@ -15,6 +15,7 @@ const notificationTitleMap = {
   "order.items_returned": "Return Received Notice Sent",
   "order.return_requested": "Return Request Confirmation Sent",
   "order.placed": "Order Confirmation Sent",
+  "order-edit.confirmed": "Order Edit Confirmed Sent",
   "order.shipment_created": "Shipment Confirmation Sent",
 }
 

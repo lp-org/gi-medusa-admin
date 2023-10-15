@@ -175,11 +175,11 @@ const CustomerTable = () => {
               <Table.Row
                 color={"inherit"}
                 actions={[
-                  {
-                    label: t("customer-table-edit", "Edit"),
-                    onClick: () => navigate(row.original.id),
-                    icon: <EditIcon size={20} />,
-                  },
+                  // {
+                  //   label: t("customer-table-edit", "Edit"),
+                  //   onClick: () => navigate(row.original.id),
+                  //   icon: <EditIcon size={20} />,
+                  // },
                   {
                     label: t("customer-table-details", "Details"),
                     onClick: () => navigate(row.original.id),

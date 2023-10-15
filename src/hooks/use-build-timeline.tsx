@@ -171,7 +171,7 @@ export const useBuildTimeline = (orderId: string) => {
   })
 
   const { order_edits: edits, isLoading: isOrderEditsLoading } =
-    useAdminOrderEdits({ order_id: orderId })
+    useAdminOrderEdits({ order_id: `${orderId}` })
 
   const { isFeatureEnabled } = useFeatureFlag()
 
@@ -182,7 +182,7 @@ export const useBuildTimeline = (orderId: string) => {
   })
 
   const { notifications } = useAdminNotifications({ resource_id: orderId })
-
+  console.log(notifications)
   const { getLocationNameById } = useStockLocations()
 
   const events: TimelineEvent[] | undefined = useMemo(() => {

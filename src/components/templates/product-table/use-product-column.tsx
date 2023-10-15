@@ -101,13 +101,16 @@ const useProductTableColumn = ({ setTileView, setListView, showList }) => {
         Header: t("product-table-inventory", "Inventory"),
         accessor: "variants",
         Cell: ({ cell: { value } }) => (
-          <div>
-            {value.reduce((acc, next) => acc + next.inventory_quantity, 0)}
+          <div className="h-16 overflow-scroll">
+            {/* {value.reduce((acc, next) => acc + next.inventory_quantity, 0)}
             {t(
               "product-table-inventory-in-stock-count",
               " in stock for {{count}} variant(s)",
               { count: value.length }
-            )}
+            )} */}
+            {
+              value.map((el)=>(<div>{el.inventory_quantity} in stock for {el.title}</div>))
+            }
           </div>
         ),
       },

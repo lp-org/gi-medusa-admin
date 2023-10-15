@@ -185,7 +185,7 @@ export const useCustomerOrdersColumns = (): Column<Order>[] => {
         },
       },
       {
-        Header: t("customer-orders-table-status", "Status"),
+        Header: t("customer-orders-table-status", "Payment Status"),
         accessor: "payment_status",
         Cell: ({ value }) => {
           return decidePaymentStatus(value, t)

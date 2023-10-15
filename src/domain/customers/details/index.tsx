@@ -19,6 +19,8 @@ import CustomerOrdersTable from "../../../components/templates/customer-orders-t
 import { useWidgets } from "../../../providers/widget-provider"
 import { getErrorStatus } from "../../../utils/get-error-status"
 import EditCustomerModal from "./edit"
+import { formatAddress } from "../../../utils/format-address"
+import { FormattedAddress } from "../../orders/details/templates"
 
 const CustomerDetail = () => {
   const { id } = useParams()
@@ -105,8 +107,10 @@ const CustomerDetail = () => {
                 <h3 className="inter-small-regular text-grey-50">
                   {customer.email}
                 </h3>
-              </div>
+              </div>             
             </div>
+
+         
             <Actionables actions={actions} forceDropdown />
           </div>
           <div className="mt-6 flex space-x-6 divide-x">
@@ -140,6 +144,18 @@ const CustomerDetail = () => {
                   title={customer.has_account ? "Registered" : "Guest"}
                 />
               </div>
+            </div>
+             <div className="flex flex-col pl-6">
+              <FormattedAddress title="Shipping Address" addr={customer.shipping_addresses[0]}/>
+             
+               
+             
+            </div>
+            <div className="flex flex-col pl-6">
+              <FormattedAddress title="Billing Address" addr={customer.billing_address}/>
+             
+               
+             
             </div>
           </div>
         </Section>

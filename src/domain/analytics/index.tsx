@@ -1,31 +1,50 @@
-import React, { useEffect, useState } from "react"
-import SalesOrder from "./SalesOrder"
-import BodyCard from "../../components/organisms/body-card"
-import api from "../../services/api"
-import { useQuery } from "@tanstack/react-query"
-import moment from "moment"
-import DatePicker from "../../components/atoms/date-picker/date-picker"
-import { useAdminStore, useAdminSalesChannels } from "medusa-react"
-import Select from "../../components/molecules/select"
-import InputHeader from "../../components/fundamentals/input-header"
-import { stringDisplayPrice } from "../../utils/prices"
+import React, { useEffect, useState } from "react";
+import SalesOrder from "./SalesOrder";
+import BodyCard from "../../components/organisms/body-card";
+import api from "../../services/api";
+import { useQuery } from "@tanstack/react-query";
+import moment from "moment";
+import DatePicker from "../../components/atoms/date-picker/date-picker";
+import { useAdminStore, useAdminSalesChannels } from "medusa-react";
+import Select from "../../components/molecules/select";
+import InputHeader from "../../components/fundamentals/input-header";
+import { stringDisplayPrice } from "../../utils/prices";
+
+import AddProductsModal from "../../components/templates/add-products-modal";
+import { Product } from "@medusajs/medusa";
+import Button from "../../components/fundamentals/button";
+import Badge from "../../components/fundamentals/badge";
+interface OptionValueType {
+  value: string;
+  label: string;
+}
 
 const Analytics = () => {
-  const { store } = useAdminStore()
-  const [{ start_date, end_date, currency, sales_channel }, setDates] =
-    useState({
-      start_date: moment().startOf("month").toDate(),
-      end_date: moment().endOf("day").toDate(),
-      currency: {
-        label: store?.default_currency.name || "USD",
-        value: store?.default_currency.code || "usd",
-      },
-      sales_channel: {
-        label: store?.default_sales_channel.name,
-        value: store?.default_sales_channel.id,
-      },
-    })
-  const { sales_channels } = useAdminSalesChannels()
+  const { store } = useAdminStore();
+  const initialValues = {
+    start_date: moment().startOf("month").toDate(),
+    end_date: moment().endOf("day").toDate(),
+    currency: {
+      label: store?.default_currency.name || "USD",
+      value: store?.default_currency.code || "usd",
+    },
+    sales_channel: {
+      label: store?.default_sales_channel.name || "",
+      value: store?.default_sales_channel.id || "",
+    },
+    product: [],
+  };
+  const [{ start_date, end_date, currency, sales_channel, product }, setDates] =
+    useState<{
+      start_date: Date;
+      end_date: Date;
+      currency: OptionValueType;
+      sales_channel: OptionValueType;
+      product: Product[];
+    }>(initialValues);
+  const { sales_channels } = useAdminSalesChannels();
+  const [showAdd, setShowAdd] = useState(false);
+  const a = product.map((el) => el.variants.map((v) => v.id)).flat();
   const { data, refetch } = useQuery({
     queryFn: () =>
       api.summary.get({
@@ -33,13 +52,17 @@ const Analytics = () => {
         sales_channel_id: sales_channel.value,
         start_date: moment(start_date).format("YYYY-MM-DD"),
         end_date: moment(end_date).format("YYYY-MM-DD"),
+        variant_id: product
+          .map((el) => el.variants.map((v) => v.id))
+          .flat()
+          .join(","),
       }),
-  })
+  });
   useEffect(() => {
     if (start_date && end_date) {
-      refetch()
+      refetch();
     }
-  }, [start_date, end_date, currency, sales_channel])
+  }, [start_date, end_date, currency, sales_channel, product]);
   return (
     <div>
       <h1 className="inter-xlarge-semibold text-grey-90">Analytics</h1>
@@ -106,7 +129,25 @@ const Analytics = () => {
             }
           />
         </div>
+
+        <div>
+          <Button onClick={() => setShowAdd(true)} variant="ghost">
+            Filter Product
+          </Button>
+          {product.length ? (
+            <Badge variant="ghost" color="bg-grey-80">
+              {product.length} Product selected
+            </Badge>
+          ) : (
+            <></>
+          )}
+        </div>
+
+        <div>
+          <Button onClick={() => setDates(initialValues)}>Reset filter</Button>
+        </div>
       </div>
+
       <BodyCard
         title={"Total order sales"}
         subtitle={stringDisplayPrice({
@@ -137,8 +178,15 @@ const Analytics = () => {
           </div>
         </div>
       </BodyCard>
+      {showAdd && (
+        <AddProductsModal
+          onSave={(e) => setDates((prev) => ({ ...prev, product: e }))}
+          initialSelection={product}
+          close={() => setShowAdd(false)}
+        />
+      )}
     </div>
-  )
-}
+  );
+};
 
-export default Analytics
+export default Analytics;
