@@ -144,7 +144,9 @@ const Analytics = () => {
         </div>
 
         <div>
-          <Button onClick={() => setDates(initialValues)}>Reset filter</Button>
+          <Button onClick={() => setDates(initialValues)} variant="primary">
+            Reset filter
+          </Button>
         </div>
       </div>
 
