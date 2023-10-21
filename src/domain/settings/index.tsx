@@ -1,38 +1,38 @@
-import React from "react"
-import { Route, Routes } from "react-router-dom"
-import { useTranslation } from "react-i18next"
-import SettingsCard from "../../components/atoms/settings-card"
-import Spacer from "../../components/atoms/spacer"
-import SettingContainer from "../../components/extensions/setting-container"
-import SettingsPageErrorElement from "../../components/extensions/setting-container/setting-error-element"
-import FeatureToggle from "../../components/fundamentals/feature-toggle"
-import ArrowUTurnLeft from "../../components/fundamentals/icons/arrow-uturn-left"
-import ChannelsIcon from "../../components/fundamentals/icons/channels-icon"
-import CoinsIcon from "../../components/fundamentals/icons/coins-icon"
-import CrosshairIcon from "../../components/fundamentals/icons/crosshair-icon"
-import GearIcon from "../../components/fundamentals/icons/gear-icon"
-import HappyIcon from "../../components/fundamentals/icons/happy-icon"
-import KeyIcon from "../../components/fundamentals/icons/key-icon"
-import MapPinIcon from "../../components/fundamentals/icons/map-pin-icon"
-import TaxesIcon from "../../components/fundamentals/icons/taxes-icon"
-import UsersIcon from "../../components/fundamentals/icons/users-icon"
-import { useSettings } from "../../providers/setting-provider"
-import CurrencySettings from "./currencies"
-import Details from "./details"
-import PersonalInformation from "./personal-information"
-import Regions from "./regions"
-import ReturnReasons from "./return-reasons"
-import Taxes from "./taxes"
-import Users from "./users"
+import React from "react";
+import { Route, Routes } from "react-router-dom";
+import { useTranslation } from "react-i18next";
+import SettingsCard from "../../components/atoms/settings-card";
+import Spacer from "../../components/atoms/spacer";
+import SettingContainer from "../../components/extensions/setting-container";
+import SettingsPageErrorElement from "../../components/extensions/setting-container/setting-error-element";
+import FeatureToggle from "../../components/fundamentals/feature-toggle";
+import ArrowUTurnLeft from "../../components/fundamentals/icons/arrow-uturn-left";
+import ChannelsIcon from "../../components/fundamentals/icons/channels-icon";
+import CoinsIcon from "../../components/fundamentals/icons/coins-icon";
+import CrosshairIcon from "../../components/fundamentals/icons/crosshair-icon";
+import GearIcon from "../../components/fundamentals/icons/gear-icon";
+import HappyIcon from "../../components/fundamentals/icons/happy-icon";
+import KeyIcon from "../../components/fundamentals/icons/key-icon";
+import MapPinIcon from "../../components/fundamentals/icons/map-pin-icon";
+import TaxesIcon from "../../components/fundamentals/icons/taxes-icon";
+import UsersIcon from "../../components/fundamentals/icons/users-icon";
+import { useSettings } from "../../providers/setting-provider";
+import CurrencySettings from "./currencies";
+import Details from "./details";
+import PersonalInformation from "./personal-information";
+import Regions from "./regions";
+import ReturnReasons from "./return-reasons";
+import Taxes from "./taxes";
+import Users from "./users";
 
-import Roles from "./roles"
-import { useIsPermission } from "../../hooks/use-is-permission"
-import StoreContent from "./content"
-import SettingsOverview from "../../components/templates/settings-overview"
-import DollarSignIcon from "../../components/fundamentals/icons/dollar-sign-icon"
+import Roles from "./roles";
+import { useIsPermission } from "../../hooks/use-is-permission";
+import StoreContent from "./content";
+import SettingsOverview from "../../components/templates/settings-overview";
+import DollarSignIcon from "../../components/fundamentals/icons/dollar-sign-icon";
 
 const SettingsIndex = () => {
-  const isPermission = useIsPermission()
+  const isPermission = useIsPermission();
 
   return (
     <SettingsOverview>
@@ -140,11 +140,11 @@ const SettingsIndex = () => {
         />
       }
     </SettingsOverview>
-  )
-}
+  );
+};
 
 const Settings = () => {
-  const isPermission = useIsPermission()
+  const isPermission = useIsPermission();
   return (
     <Routes>
       <Route index element={<SettingsIndex />} />
@@ -161,7 +161,7 @@ const Settings = () => {
       <Route path="/taxes" element={<Taxes />} />
       <Route path="/store-content" element={<StoreContent />} />
     </Routes>
-  )
-}
+  );
+};
 
-export default Settings
+export default Settings;

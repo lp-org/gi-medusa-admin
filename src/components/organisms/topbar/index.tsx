@@ -1,35 +1,34 @@
-import React, { useCallback, useState, type MouseEvent } from "react"
-import useToggleState from "../../../hooks/use-toggle-state"
-import { usePolling } from "../../../providers/polling-provider"
-import Button from "../../fundamentals/button"
-import HelpCircleIcon from "../../fundamentals/icons/help-circle"
-import NotificationBell from "../../molecules/notification-bell"
-import SearchBar from "../../molecules/search-bar"
-import ActivityDrawer from "../activity-drawer"
-import MailDialog from "../help-dialog"
-import LanguageMenu from "../../molecules/language-menu"
+import React, { useCallback, useState, type MouseEvent } from "react";
+import useToggleState from "../../../hooks/use-toggle-state";
+import { usePolling } from "../../../providers/polling-provider";
+import Button from "../../fundamentals/button";
+import HelpCircleIcon from "../../fundamentals/icons/help-circle";
+import NotificationBell from "../../molecules/notification-bell";
+import SearchBar from "../../molecules/search-bar";
+import ActivityDrawer from "../activity-drawer";
+import MailDialog from "../help-dialog";
 
 const Topbar: React.FC = () => {
   const {
     state: activityDrawerState,
     toggle: toggleActivityDrawer,
     close: activityDrawerClose,
-  } = useToggleState(false)
+  } = useToggleState(false);
 
-  const { batchJobs } = usePolling()
+  const { batchJobs } = usePolling();
 
-  const [showSupportform, setShowSupportForm] = useState(false)
+  const [showSupportform, setShowSupportForm] = useState(false);
 
   const onNotificationBellClick = useCallback(
     (event: MouseEvent) => {
-      event.stopPropagation()
-      toggleActivityDrawer()
+      event.stopPropagation();
+      toggleActivityDrawer();
     },
     [toggleActivityDrawer]
-  )
+  );
 
   return (
-    <div className="sticky top-0 z-40 flex max-h-topbar min-h-topbar w-full items-center justify-between border-b border-grey-20 bg-grey-0 pr-xlarge pl-base">
+    <div className="min-h-topbar max-h-topbar pr-xlarge pl-base bg-grey-0 border-grey-20 flex w-full items-center justify-between border-b">
       <SearchBar />
       <div className="flex items-center">
         {/* <Button
@@ -57,7 +56,7 @@ const Topbar: React.FC = () => {
         <ActivityDrawer onDismiss={activityDrawerClose} />
       )}
     </div>
-  )
-}
+  );
+};
 
-export default Topbar
+export default Topbar;
