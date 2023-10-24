@@ -34,7 +34,7 @@ export default {
     delete(id) {
       const path = `/admin/return-reasons/${id}`
       return medusaRequest("DELETE", path)
-    },
+    }
   },
   apps: {
     authorize(data) {
@@ -45,7 +45,7 @@ export default {
     list() {
       const path = `/admin/apps`
       return medusaRequest("GET", path)
-    },
+    }
   },
   auth: {
     session() {
@@ -59,7 +59,7 @@ export default {
     deauthenticate(details) {
       const path = `/admin/auth`
       return medusaRequest("DELETE", path)
-    },
+    }
   },
   notifications: {
     list(search = {}) {
@@ -72,7 +72,7 @@ export default {
     resend(id, config) {
       const path = `/admin/notifications/${id}/resend`
       return medusaRequest("POST", path, config)
-    },
+    }
   },
   notes: {
     listByResource(resourceId) {
@@ -84,7 +84,7 @@ export default {
       return medusaRequest("POST", path, {
         resource_id: resourceId,
         resource_type: resourceType,
-        value,
+        value
       })
     },
     update(id, value) {
@@ -94,7 +94,7 @@ export default {
     delete(id) {
       const path = `admin/notes/${id}`
       return medusaRequest("DELETE", path)
-    },
+    }
   },
 
   customers: {
@@ -109,7 +109,7 @@ export default {
     update(customerId, update) {
       const path = `admin/customers/${customerId}`
       return medusaRequest("POST", path, update)
-    },
+    }
   },
   store: {
     retrieve() {
@@ -145,7 +145,7 @@ export default {
     postContent(data) {
       const path = `/admin/store-content`
       return medusaRequest("POST", path, data)
-    },
+    }
   },
   shippingProfiles: {
     list() {
@@ -166,7 +166,7 @@ export default {
     update(profileId, update) {
       const path = `/admin/shipping-profiles/${profileId}`
       return medusaRequest("POST", path, update)
-    },
+    }
   },
 
   giftCards: {
@@ -196,7 +196,7 @@ export default {
     delete(giftCardId) {
       const path = `/admin/gift-cards/${giftCardId}`
       return medusaRequest("DELETE", path)
-    },
+    }
   },
 
   variants: {
@@ -206,7 +206,7 @@ export default {
         .join("&")
       const path = `/admin/variants${params && `?${params}`}`
       return medusaRequest("GET", path)
-    },
+    }
   },
 
   products: {
@@ -272,7 +272,7 @@ export default {
       list(productId) {
         const path = `/admin/products/${productId}/variants`
         return medusaRequest("GET", path)
-      },
+      }
     },
 
     options: {
@@ -289,8 +289,8 @@ export default {
       update(productId, optionId, update) {
         const path = `/admin/products/${productId}/options/${optionId}`
         return medusaRequest("POST", path, update)
-      },
-    },
+      }
+    }
   },
 
   swaps: {
@@ -316,7 +316,7 @@ export default {
         .join("&")
       const path = `/admin/swaps${params && `?${params}`}`
       return medusaRequest("GET", path)
-    },
+    }
   },
 
   returns: {
@@ -328,7 +328,7 @@ export default {
         .join("&")
       const path = `/admin/returns${params && `?${params}`}`
       return medusaRequest("GET", path)
-    },
+    }
   },
 
   collections: {
@@ -355,7 +355,7 @@ export default {
     removeProducts(id, payload) {
       const path = `/admin/collections/${id}/products/batch`
       return medusaRequest("DELETE", path, payload)
-    },
+    }
   },
 
   orders: {
@@ -519,7 +519,7 @@ export default {
     cancel(orderId) {
       const path = `/admin/orders/${orderId}/cancel`
       return medusaRequest("POST", path, {})
-    },
+    }
   },
 
   shippingOptions: {
@@ -549,7 +549,7 @@ export default {
     update(id, update) {
       const path = `/admin/shipping-options/${id}`
       return medusaRequest("POST", path, update)
-    },
+    }
   },
 
   discounts: {
@@ -582,7 +582,7 @@ export default {
     retrieveByCode(code) {
       const path = `/admin/discounts/code/${code}`
       return medusaRequest("GET", path)
-    },
+    }
   },
 
   regions: {
@@ -615,8 +615,8 @@ export default {
       list(regionId) {
         const path = `/admin/regions/${regionId}/fulfillment-options`
         return medusaRequest("GET", path)
-      },
-    },
+      }
+    }
   },
 
   uploads: {
@@ -627,7 +627,7 @@ export default {
       }
 
       return medusaRequest("POST", "/admin/uploads", formData)
-    },
+    }
   },
 
   draftOrders: {
@@ -683,7 +683,7 @@ export default {
         .join("&")
       const path = `/admin/draft-orders${params && `?${params}`}`
       return medusaRequest("GET", path)
-    },
+    }
   },
   invites: {
     create(data) {
@@ -705,7 +705,7 @@ export default {
     accept(data) {
       const path = `/admin/invites/accept`
       return medusaRequest("POST", path, data)
-    },
+    }
   },
   users: {
     resetPasswordToken(data) {
@@ -735,7 +735,7 @@ export default {
     delete(userId) {
       const path = `/admin/users/${userId}`
       return medusaRequest("DELETE", path)
-    },
+    }
   },
 
   roles: {
@@ -761,7 +761,7 @@ export default {
     delete(roleId) {
       const path = `/admin/roles/${roleId}`
       return medusaRequest("DELETE", path)
-    },
+    }
   },
 
   permissions: {
@@ -776,7 +776,7 @@ export default {
     setRolePermission({ roleId, data }) {
       const path = `/admin/permissions/role/${roleId}`
       return medusaRequest("PUT", path, data)
-    },
+    }
   },
   pages: {
     list(search = {}) {
@@ -800,13 +800,23 @@ export default {
     key() {
       const path = `/admin/pagesCustomizeKey`
       return medusaRequest("GET", path)
-    },
+    }
   },
   summary: {
     get(search = {}) {
       const params = queryString.stringify(search)
       const path = `/admin/summary${params && `?${params}`}`
       return medusaRequest("GET", path)
-    },
+    }
   },
+  lowStock: {
+    count() {
+      const path = `/admin/low-stock/count`
+      return medusaRequest("GET", path)
+    },
+    list() {
+      const path = `/admin/low-stock`
+      return medusaRequest("GET", path)
+    }
+  }
 }

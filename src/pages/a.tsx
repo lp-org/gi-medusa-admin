@@ -27,6 +27,7 @@ import Analytics from "../domain/analytics";
 import { useRoutes } from "../providers/route-provider";
 import { isRoute } from "../utils/extensions";
 import Pricing from "../domain/pricing";
+import LowStock from "../domain/low-stock";
 
 const IndexPage = () => {
   const navigate = useNavigate();
@@ -63,6 +64,7 @@ const DashboardRoutes = () => {
           <Route path="pages/*" element={<Pages />} />
           <Route path="analytics/*" element={<Analytics />} />
           <Route path="settings/*" element={<Settings />} />
+          <Route path="low-stock/*" element={<LowStock />} />
           <Route path="sales-channels/*" element={<SalesChannels />} />
           <Route
             path="publishable-api-keys/*"
