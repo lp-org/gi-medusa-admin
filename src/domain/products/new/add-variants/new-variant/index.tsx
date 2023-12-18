@@ -8,7 +8,7 @@ import Tooltip from "../../../../../components/atoms/tooltip"
 import { CustomsFormType } from "../../../../../components/forms/product/customs-form"
 import { DimensionsFormType } from "../../../../../components/forms/product/dimensions-form"
 import CreateFlowVariantForm, {
-  CreateFlowVariantFormType,
+  CreateFlowVariantFormType
 } from "../../../../../components/forms/product/variant-form/create-flow-variant-form"
 import { VariantOptionValueType } from "../../../../../components/forms/product/variant-form/variant-select-options-form"
 import Button from "../../../../../components/fundamentals/button"
@@ -21,14 +21,14 @@ import Actionables from "../../../../../components/molecules/actionables"
 import IconTooltip from "../../../../../components/molecules/icon-tooltip"
 import Modal from "../../../../../components/molecules/modal"
 import LayeredModal, {
-  LayeredModalContext,
+  LayeredModalContext
 } from "../../../../../components/molecules/modal/layered-modal"
 import useImperativeDialog from "../../../../../hooks/use-imperative-dialog"
 import useToggleState from "../../../../../hooks/use-toggle-state"
 import { DragItem } from "../../../../../types/shared"
 
 const ItemTypes = {
-  CARD: "card",
+  CARD: "card"
 }
 
 type Props = {
@@ -54,12 +54,12 @@ const NewVariant = ({
   options,
   onCreateOption,
   productDimensions,
-  productCustoms,
+  productCustoms
 }: Props) => {
   const { t } = useTranslation()
   const { state, toggle, close } = useToggleState()
   const localForm = useForm<CreateFlowVariantFormType>({
-    defaultValues: source,
+    defaultValues: source
   })
 
   const { handleSubmit, reset } = localForm
@@ -78,7 +78,7 @@ const NewVariant = ({
       ...data,
       title: data.general.title
         ? data.general.title
-        : data.options.map((vo) => vo.option?.value).join(" / "),
+        : data.options.map((vo) => vo.option?.value).join(" / ")
     }
 
     const saved = save(index, payload)
@@ -89,7 +89,7 @@ const NewVariant = ({
         message: t(
           "new-variant-a-variant-with-these-options-already-exists",
           "A variant with these options already exists."
-        ),
+        )
       })
       return
     }
@@ -105,7 +105,7 @@ const NewVariant = ({
         "new-variant-are-you-sure-you-want-to-delete-this-variant",
         "Are you sure you want to delete this variant?"
       ),
-      heading: t("new-variant-delete-variant", "Delete Variant"),
+      heading: t("new-variant-delete-variant", "Delete Variant")
     })
 
     if (confirmed) {
@@ -122,7 +122,7 @@ const NewVariant = ({
     accept: ItemTypes.CARD,
     collect(monitor) {
       return {
-        handlerId: monitor.getHandlerId(),
+        handlerId: monitor.getHandlerId()
       }
     },
     hover(item: DragItem, monitor) {
@@ -153,7 +153,7 @@ const NewVariant = ({
       move(dragIndex, hoverIndex)
 
       item.index = hoverIndex
-    },
+    }
   })
 
   const [{ isDragging }, drag, preview] = useDrag({
@@ -162,8 +162,8 @@ const NewVariant = ({
       return { id, index }
     },
     collect: (monitor) => ({
-      isDragging: monitor.isDragging(),
-    }),
+      isDragging: monitor.isDragging()
+    })
   })
 
   drag(drop(ref))
@@ -177,7 +177,7 @@ const NewVariant = ({
         className={clsx(
           "grid h-16 translate-y-0 translate-x-0 grid-cols-[32px_1fr_90px_100px_48px] rounded-rounded py-xsmall pl-xsmall pr-base transition-all focus-within:bg-grey-5 hover:bg-grey-5",
           {
-            "opacity-50": isDragging,
+            "opacity-50": isDragging
           }
         )}
       >
@@ -219,14 +219,14 @@ const NewVariant = ({
               {
                 label: t("new-variant-edit", "Edit"),
                 icon: <EditIcon size={20} />,
-                onClick: toggle,
+                onClick: toggle
               },
               {
                 label: t("new-variant-delete", "Delete"),
                 icon: <TrashIcon size={20} />,
                 onClick: onDelete,
-                variant: "danger",
-              },
+                variant: "danger"
+              }
             ]}
             customTrigger={
               <Button
@@ -291,15 +291,14 @@ const NewVariant = ({
 const VariantValidity = ({
   source,
   productCustoms,
-  productDimensions,
+  productDimensions
 }: Pick<Props, "source" | "productCustoms" | "productDimensions">) => {
   const {
-    prices,
     options,
     dimensions,
     customs,
     stock: { barcode, upc, ean, sku, inventory_quantity },
-    general: { title },
+    general: { title }
   } = source
 
   if (!options || !options.length) {
@@ -335,8 +334,6 @@ const VariantValidity = ({
     )
   }
 
-  const validPrices = prices?.prices.some((p) => p.amount !== null)
-
   const validDimensions =
     Object.values(productDimensions).every((value) => !!value) ||
     Object.values(dimensions).every((value) => !!value)
@@ -346,13 +343,7 @@ const VariantValidity = ({
 
   const barcodeValidity = !!barcode || !!upc || !!ean
 
-  if (
-    !sku ||
-    !validCustoms ||
-    !validDimensions ||
-    !barcodeValidity ||
-    !validPrices
-  ) {
+  if (!sku || !validCustoms || !validDimensions || !barcodeValidity) {
     return (
       <IconTooltip
         type="warning"
@@ -364,7 +355,6 @@ const VariantValidity = ({
               fields:
             </p>
             <ul className="list-inside list-disc">
-              {!validPrices && <li>Pricing</li>}
               {!validDimensions && <li>Dimensions</li>}
               {!validCustoms && <li>Customs</li>}
               {!inventory_quantity && <li>Inventory quantity</li>}

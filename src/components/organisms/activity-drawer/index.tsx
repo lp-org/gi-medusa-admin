@@ -1,22 +1,22 @@
-import React, { useEffect } from "react";
-import { useTranslation } from "react-i18next";
+import React, { useEffect } from "react"
+import { useTranslation } from "react-i18next"
 
-import useOutsideClick from "../../../hooks/use-outside-click";
-import { usePolling } from "../../../providers/polling-provider";
-import Spinner from "../../atoms/spinner";
-import SadFaceIcon from "../../fundamentals/icons/sad-face-icon";
-import SidedMouthFaceIcon from "../../fundamentals/icons/sided-mouth-face";
-import BatchJobActivityList from "../batch-jobs-activity-list";
+import useOutsideClick from "../../../hooks/use-outside-click"
+import { usePolling } from "../../../providers/polling-provider"
+import Spinner from "../../atoms/spinner"
+import SadFaceIcon from "../../fundamentals/icons/sad-face-icon"
+import SidedMouthFaceIcon from "../../fundamentals/icons/sided-mouth-face"
+import BatchJobActivityList from "../batch-jobs-activity-list"
 
 const ActivityDrawer = ({ onDismiss }) => {
-  const { t } = useTranslation();
-  const ref = React.useRef<HTMLDivElement>(null);
-  const { batchJobs, hasPollingError, refetch } = usePolling();
-  useOutsideClick(onDismiss, ref);
+  const { t } = useTranslation()
+  const ref = React.useRef<HTMLDivElement>(null)
+  const { batchJobs, hasPollingError, refetch } = usePolling()
+  useOutsideClick(onDismiss, ref)
 
   useEffect(() => {
-    refetch();
-  }, []);
+    refetch()
+  }, [])
 
   return (
     <div
@@ -37,11 +37,11 @@ const ActivityDrawer = ({ onDismiss }) => {
         <ErrorActivityDrawer />
       )}
     </div>
-  );
-};
+  )
+}
 
 const EmptyActivityDrawer = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation()
 
   return (
     <div className="flex h-full w-full flex-col items-center justify-center p-4">
@@ -56,11 +56,11 @@ const EmptyActivityDrawer = () => {
         )}
       </span>
     </div>
-  );
-};
+  )
+}
 
 const ErrorActivityDrawer = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation()
   return (
     <div className="flex h-full w-full flex-col items-center justify-center p-4">
       <SadFaceIcon size={36} />
@@ -81,7 +81,7 @@ const ErrorActivityDrawer = () => {
         </span>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default ActivityDrawer;
+export default ActivityDrawer
