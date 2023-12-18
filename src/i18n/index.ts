@@ -7,73 +7,72 @@ import { getFullAdminPath } from "../utils/get-admin-path"
 export const supportedLanguages = [
   {
     locale: "en",
-    name: "English",
+    name: "English"
   },
   {
     locale: "de",
-    name: "Deutsch",
+    name: "Deutsch"
   },
   {
     locale: "fr",
-    name: "Français",
+    name: "Français"
   },
   {
     locale: "hr",
-    name: "Hrvatski",
+    name: "Hrvatski"
   },
   {
     locale: "it",
-    name: "Italiano",
+    name: "Italiano"
   },
   {
     locale: "pt",
-    name: "Português (Brasil)",
+    name: "Português (Brasil)"
   },
   {
     locale: "uk",
-    name: "Українська",
+    name: "Українська"
   },
   {
     locale: "ar",
-    name: "العربية",
+    name: "العربية"
   },
   {
     locale: "pl",
-    name: "Polski",
+    name: "Polski"
   },
   {
     locale: "es",
-    name: "Español",
+    name: "Español"
   },
   {
-
     locale: "hi",
     name: "Hindi"
   },
   {
     locale: "bs",
-    name: "Bosanski",
+    name: "Bosanski"
   },
   {
     locale: "vi",
-    name: "Tiếng Việt",
+    name: "Tiếng Việt"
   },
   {
     locale: "tm",
-    name: "Tamil",
+    name: "Tamil"
   },
   {
     locale: "ru",
     name: "Русский"
   },
-  { 
+  {
     locale: "ko",
     name: "한국어"
   }
 ].sort((a, b) => a.locale.localeCompare(b.locale))
 
 const adminPath = getFullAdminPath()
-const pathToLoadFrom = `${adminPath}public/locales/{{lng}}/{{ns}}.json`
+const pathToLoadFrom = `${adminPath}/public/locales/{{lng}}/{{ns}}.json`
 
 void i18n
   .use(Backend)
@@ -82,18 +81,18 @@ void i18n
   // https://www.i18next.com/overview/configuration-options
   .init({
     backend: {
-      loadPath: pathToLoadFrom,
+      loadPath: pathToLoadFrom
     },
     supportedLngs: supportedLanguages.map((l) => l.locale),
     fallbackLng: "en",
     returnNull: false,
     debug: true,
     interpolation: {
-      escapeValue: false,
+      escapeValue: false
     },
     load: "currentOnly",
     // https://github.com/i18next/i18next-browser-languageDetector#detector-options
     detection: {
-      convertDetectedLanguage: (lng) => lng.split("-")[0],
-    },
+      convertDetectedLanguage: (lng) => lng.split("-")[0]
+    }
   })
