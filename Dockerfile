@@ -11,5 +11,6 @@ ENV MEDUSA_BACKEND_URL=${MEDUSA_BACKEND_URL}
 RUN npm run build
 
 FROM socialengine/nginx-spa:latest
-COPY ./dist /app
+# copy dist built folder to /app 
+COPY --from=0 /app/dist /app
 RUN chmod -R 777 /app
