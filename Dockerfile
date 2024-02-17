@@ -8,7 +8,8 @@ RUN npm install && npm cache clean --force
 ARG MEDUSA_BACKEND_URL=${MEDUSA_BACKEND_URL}
 ENV MEDUSA_BACKEND_URL=${MEDUSA_BACKEND_URL}
 
-FROM socialengine/nginx-spa:latest
 RUN npm run build
+
+FROM socialengine/nginx-spa:latest
 COPY ./dist /app
 RUN chmod -R 777 /app
