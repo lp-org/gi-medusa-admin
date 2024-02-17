@@ -2,9 +2,9 @@
 FROM node:18.19.0-alpine
 RUN mkdir -p /app
 WORKDIR /app
-COPY . /app/
+COPY ./package.json /app/
 RUN npm install && npm cache clean --force
-
+COPY ./ /app
 ARG MEDUSA_BACKEND_URL=${MEDUSA_BACKEND_URL}
 ENV MEDUSA_BACKEND_URL=${MEDUSA_BACKEND_URL}
 
