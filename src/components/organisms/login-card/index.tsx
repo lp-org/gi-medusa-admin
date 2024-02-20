@@ -23,8 +23,13 @@ const LoginCard = ({ toResetPassword }: LoginCardProps) => {
     register,
     handleSubmit,
     setError,
-    formState: { errors },
-  } = useForm<FormValues>()
+    formState: { errors }
+  } = useForm<FormValues>({
+    defaultValues: {
+      email: "admin@medusa-test.com",
+      password: "supersecret"
+    }
+  })
   const navigate = useNavigate()
   const { mutate, isLoading } = useAdminLogin()
   const list = sidebarMenu()
@@ -45,13 +50,13 @@ const LoginCard = ({ toResetPassword }: LoginCardProps) => {
             message: t(
               "login-card-no-match",
               "These credentials do not match our records."
-            ),
+            )
           },
           {
-            shouldFocus: true,
+            shouldFocus: true
           }
         )
-      },
+      }
     })
   }
   return (
